@@ -1669,6 +1669,444 @@
                 border: none;
             }
         }
+
+        @media (max-width: 768px) {
+            body {
+                overflow-x: hidden;
+            }
+
+            .orb {
+                filter: blur(90px);
+                opacity: 0.38;
+            }
+
+            #sticky-wrapper {
+                top: 16px;
+            }
+
+            #liquid-nav {
+                width: calc(100% - 32px);
+                max-width: 420px;
+                border-radius: 22px;
+            }
+
+            .nav-container {
+                height: 48px;
+                padding: 0 0.7rem;
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: space-between;
+                gap: 0.15rem;
+            }
+
+            .nav-link {
+                flex: 1;
+                text-align: center;
+                font-size: 0.72rem;
+                padding: 0.7rem 0.15rem;
+            }
+
+            #global-language-switch {
+                top: 74px;
+                right: 16px;
+                padding: 7px 10px;
+            }
+
+            .lang-label {
+                font-size: 0.72rem;
+                letter-spacing: 0.8px;
+            }
+
+            .toggle-switch {
+                width: 46px;
+                height: 26px;
+            }
+
+            .slider:before {
+                width: 18px;
+                height: 18px;
+                left: 3px;
+                bottom: 3px;
+            }
+
+            input:checked+.slider:before {
+                transform: translateX(20px);
+            }
+
+            #mainHeader {
+                margin-top: 126px;
+                min-height: 34svh;
+                height: auto;
+                font-size: 20vw;
+                padding: 3rem 0 1.5rem;
+            }
+
+            .header-line {
+                line-height: 0.85;
+            }
+
+            .subtitle-container {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin-top: 1rem;
+                padding-left: 5vw;
+            }
+
+            .subtitle {
+                font-size: 10vw;
+                white-space: normal;
+            }
+
+            .subtitle.outline {
+                transform: translateY(96%);
+            }
+
+            .section-title {
+                margin-top: 44px;
+                margin-bottom: 16px;
+                font-size: 0.68rem;
+                letter-spacing: 2.8px;
+                padding: 0.75rem 1rem;
+            }
+
+            #scene-container {
+                height: 52svh;
+                min-height: 360px;
+            }
+
+            .carousel-section {
+                height: 390px;
+                padding: 24px 0 34px;
+            }
+
+            .carousel-track {
+                height: 240px;
+            }
+
+            .cover-art {
+                width: 176px;
+                height: 176px;
+            }
+
+            .nav-arrows {
+                top: auto;
+                bottom: 6px;
+                transform: none;
+                padding: 0 18px;
+            }
+
+            .arrow {
+                width: 42px;
+                height: 26px;
+            }
+
+            .stream-counter-section {
+                margin: 34px 0 48px;
+                padding: 0 16px;
+            }
+
+            .counter-container {
+                width: 100%;
+                padding: 26px 22px;
+                border-radius: 24px;
+            }
+
+            .stat-label {
+                font-size: 0.74rem;
+                letter-spacing: 1px;
+            }
+
+            .counter-display {
+                font-size: clamp(1.9rem, 8vw, 2.6rem);
+            }
+
+            .app-feature-section {
+                padding: 0 16px 56px;
+            }
+
+            .app-feature-card {
+                padding: 1.25rem;
+                border-radius: 24px;
+                gap: 1rem;
+            }
+
+            .app-feature-copy {
+                padding-top: 0;
+            }
+
+            .app-feature-kicker {
+                font-size: 0.68rem;
+                letter-spacing: 2px;
+                margin-bottom: 8px;
+            }
+
+            .app-feature-logo {
+                width: min(100%, 330px);
+                margin-top: -4px;
+                margin-bottom: -10px;
+            }
+
+            .app-feature-subtitle {
+                font-size: 1rem;
+                margin-bottom: 0.85rem;
+            }
+
+            .app-feature-description {
+                font-size: 0.96rem;
+                line-height: 1.65;
+                margin-bottom: 1.2rem;
+            }
+
+            .app-feature-cta {
+                width: 100%;
+                justify-content: center;
+                padding: 0.88rem 1rem;
+                font-size: 0.8rem;
+            }
+
+            .app-preview {
+                min-height: 290px;
+            }
+
+            .app-screenshot-frame {
+                width: 210px;
+                padding: 10px;
+                transform: rotate(5deg);
+            }
+
+            .app-screenshot-frame::before {
+                width: 88px;
+                height: 18px;
+            }
+
+            .about-container {
+                padding: 56px 16px;
+            }
+
+            .about-section {
+                margin: 0 auto;
+                padding: 1.6rem 1.2rem;
+                border-radius: 22px;
+            }
+
+            .about-section h2 {
+                font-size: 0.95rem;
+                letter-spacing: 3px;
+                margin-bottom: 24px;
+            }
+
+            .about-content {
+                padding: 0;
+            }
+
+            .about-content p {
+                font-size: 1rem;
+                line-height: 1.7;
+                margin-bottom: 1rem;
+            }
+
+            footer {
+                padding: 40px 16px 60px;
+            }
+
+            .cv-container-inner {
+                padding: 0 8px;
+            }
+
+            .cv-page {
+                min-height: auto;
+                border-radius: 18px;
+            }
+
+            .content-wrapper-cv {
+                padding: 24px 18px 54px;
+                gap: 18px;
+            }
+
+            .cv-name {
+                font-size: 2.35rem !important;
+                letter-spacing: -1px;
+            }
+
+            .glass-card-cv {
+                padding: 16px;
+                margin-bottom: 18px;
+            }
+
+            .cv-h2 {
+                font-size: 0.8rem !important;
+                letter-spacing: 2px !important;
+                justify-content: flex-start !important;
+            }
+
+            .cv-h3 {
+                font-size: 0.95rem !important;
+            }
+
+            .contact-info p,
+            .cv-p,
+            .role-cv {
+                font-size: 0.82rem;
+            }
+
+            .timeline-item {
+                padding-left: 16px;
+                margin-bottom: 24px;
+            }
+
+            .footer-date-cv {
+                position: static;
+                display: block;
+                margin-top: 8px;
+                padding: 0 18px 18px;
+                text-align: right;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #liquid-nav {
+                width: calc(100% - 20px);
+            }
+
+            .nav-container {
+                height: 44px;
+                padding: 0 0.5rem;
+            }
+
+            .nav-link {
+                font-size: 0.64rem;
+                padding: 0.65rem 0.1rem;
+            }
+
+            #global-language-switch {
+                top: 68px;
+                right: 10px;
+                padding: 6px 9px;
+                transform: none;
+            }
+
+            .lang-label {
+                font-size: 0.66rem;
+            }
+
+            .toggle-switch {
+                width: 40px;
+                height: 22px;
+            }
+
+            .slider:before {
+                width: 16px;
+                height: 16px;
+                left: 2px;
+                bottom: 2px;
+            }
+
+            input:checked+.slider:before {
+                transform: translateX(18px);
+            }
+
+            #mainHeader {
+                margin-top: 118px;
+                min-height: 30svh;
+                font-size: 22vw;
+            }
+
+            .subtitle {
+                font-size: 11vw;
+            }
+
+            #scene-container {
+                height: 44svh;
+                min-height: 300px;
+            }
+
+            .carousel-section {
+                height: 330px;
+            }
+
+            .carousel-track {
+                height: 190px;
+            }
+
+            .cover-art {
+                width: 138px;
+                height: 138px;
+            }
+
+            .stream-counter-section {
+                margin: 26px 0 42px;
+                padding: 0 12px;
+            }
+
+            .counter-container {
+                padding: 22px 16px;
+            }
+
+            .stat-label {
+                font-size: 0.68rem;
+            }
+
+            .counter-display {
+                font-size: 1.7rem;
+            }
+
+            .app-feature-section {
+                padding: 0 12px 48px;
+            }
+
+            .app-feature-card {
+                padding: 1rem;
+                border-radius: 20px;
+            }
+
+            .app-feature-logo {
+                width: min(100%, 280px);
+                margin-bottom: -12px;
+            }
+
+            .app-feature-description {
+                font-size: 0.92rem;
+            }
+
+            .app-preview {
+                min-height: 250px;
+            }
+
+            .app-screenshot-frame {
+                width: 180px;
+                padding: 8px;
+            }
+
+            .app-screenshot-frame::before {
+                top: 8px;
+                width: 72px;
+                height: 16px;
+            }
+
+            .about-container {
+                padding: 48px 12px;
+            }
+
+            .about-section {
+                padding: 1.35rem 1rem;
+            }
+
+            .about-section h2 {
+                font-size: 0.86rem;
+                letter-spacing: 2.5px;
+            }
+
+            .about-content p {
+                font-size: 0.95rem;
+            }
+
+            .orb-3 {
+                display: none;
+            }
+        }
     </style>
 </head>
 
