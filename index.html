@@ -93,6 +93,7 @@
                 linear-gradient(180deg, rgba(255, 255, 255, 0.016) 0%, transparent 28%, rgba(255, 255, 255, 0.01) 52%, transparent 100%);
             background-size: 180px 180px, 240px 240px, 220px 220px, 260px 260px, 100% 100%, 100% 100%;
             opacity: 1;
+            animation: backgroundDrift 34s ease-in-out infinite;
         }
 
         body::after {
@@ -110,6 +111,7 @@
                 radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.28) 100%);
             mix-blend-mode: soft-light;
             opacity: 0.5;
+            animation: textureDrift 26s linear infinite;
         }
 
         /* Ambient Light (Orbs) */
@@ -122,6 +124,33 @@
             overflow: hidden;
             pointer-events: none;
             z-index: -1;
+        }
+
+        .orb-container::before,
+        .orb-container::after {
+            content: '';
+            position: absolute;
+            inset: -12%;
+            pointer-events: none;
+        }
+
+        .orb-container::before {
+            background:
+                radial-gradient(circle at 18% 24%, rgba(255, 255, 255, 0.08) 0%, transparent 24%),
+                radial-gradient(circle at 82% 18%, rgba(185, 54, 37, 0.18) 0%, transparent 28%),
+                radial-gradient(circle at 68% 72%, rgba(255, 255, 255, 0.045) 0%, transparent 24%);
+            filter: blur(72px);
+            opacity: 0.55;
+            animation: auroraShift 28s ease-in-out infinite;
+        }
+
+        .orb-container::after {
+            background:
+                linear-gradient(115deg, transparent 0%, rgba(255, 255, 255, 0.04) 22%, transparent 40%),
+                linear-gradient(145deg, transparent 16%, rgba(164, 49, 35, 0.12) 46%, transparent 72%);
+            filter: blur(110px);
+            opacity: 0.42;
+            animation: ambientSweep 34s ease-in-out infinite;
         }
 
         .orb {
@@ -169,6 +198,98 @@
 
             50% {
                 transform: translate(40px, -30px);
+            }
+        }
+
+        @keyframes backgroundDrift {
+
+            0%,
+            100% {
+                background-position:
+                    0 0,
+                    0 0,
+                    0 0,
+                    0 0,
+                    0 0,
+                    0 0;
+            }
+
+            50% {
+                background-position:
+                    16px -14px,
+                    -18px 12px,
+                    12px 16px,
+                    -14px -10px,
+                    0 0,
+                    0 0;
+            }
+        }
+
+        @keyframes textureDrift {
+
+            0%,
+            100% {
+                background-position:
+                    0 0,
+                    0 0,
+                    center;
+            }
+
+            50% {
+                background-position:
+                    0 16px,
+                    12px 8px,
+                    center;
+            }
+        }
+
+        @keyframes auroraShift {
+
+            0%,
+            100% {
+                transform: translate3d(0, 0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate3d(18px, -22px, 0) scale(1.04);
+            }
+        }
+
+        @keyframes ambientSweep {
+
+            0%,
+            100% {
+                transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+            }
+
+            50% {
+                transform: translate3d(-22px, 18px, 0) rotate(-2deg) scale(1.03);
+            }
+        }
+
+        @keyframes sceneFrameFloat {
+
+            0%,
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            50% {
+                transform: translate(-50%, -51.6%) scale(1.012);
+            }
+        }
+
+        @keyframes sceneShineDrift {
+
+            0%,
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.72;
+            }
+
+            50% {
+                transform: translate(-50%, -49.2%) scale(1.018);
+                opacity: 0.95;
             }
         }
 
@@ -392,7 +513,63 @@
             width: 100%;
             height: 80vh;
             display: block;
+            position: relative;
+            isolation: isolate;
+            overflow: visible;
             /* cursor: default entfernt, da Body den Cursor verbirgt */
+        }
+
+        #scene-container::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: min(1120px, 90vw);
+            height: min(560px, 72vh);
+            transform: translate(-50%, -50%);
+            border-radius: 44px;
+            background:
+                linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 24%, rgba(255, 255, 255, 0.01) 56%, rgba(0, 0, 0, 0.14) 100%),
+                radial-gradient(circle at 18% 34%, rgba(173, 52, 33, 0.26) 0%, transparent 30%),
+                radial-gradient(circle at 84% 68%, rgba(129, 92, 255, 0.15) 0%, transparent 30%),
+                rgba(11, 11, 16, 0.34);
+            backdrop-filter: blur(28px) saturate(1.14) contrast(1.04);
+            border: 1px solid rgba(255, 255, 255, 0.11);
+            box-shadow:
+                0 28px 70px rgba(0, 0, 0, 0.42),
+                0 -4px 24px rgba(255, 255, 255, 0.08),
+                0 18px 46px rgba(136, 48, 34, 0.14),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                inset 0 -24px 48px rgba(0, 0, 0, 0.16);
+            z-index: 0;
+            pointer-events: none;
+            animation: sceneFrameFloat 14s ease-in-out infinite;
+        }
+
+        #scene-container::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: min(1060px, 84vw);
+            height: min(500px, 64vh);
+            transform: translate(-50%, -50%);
+            border-radius: 38px;
+            background:
+                radial-gradient(circle at 20% 28%, rgba(255, 255, 255, 0.12) 0%, transparent 22%),
+                linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.06) 18%, transparent 34%, rgba(255, 255, 255, 0.04) 56%, transparent 72%, rgba(255, 255, 255, 0.08) 88%, transparent 100%),
+                radial-gradient(ellipse at 50% 88%, rgba(255, 255, 255, 0.08) 0%, transparent 55%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            pointer-events: none;
+            z-index: 1;
+            animation: sceneShineDrift 18s ease-in-out infinite;
+        }
+
+        #scene-container canvas {
+            position: relative;
+            z-index: 3;
+            display: block;
         }
 
         .carousel-section {
@@ -423,7 +600,7 @@
             border-radius: 4px;
             /* Ãœbergang fÃ¼r die Transformation und den Schatten */
             transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
-            /* Ãœbergang fÃ¼r den Glow muss kÃ¼rzer sein, damit die Animation sanft beginnt */
+            /* Ãœmbergang fÃ¼r den Glow muss kÃ¼rzer sein, damit die Animation sanft beginnt */
             transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.2s ease-out;
             transform-origin: center center;
             will-change: transform, opacity, filter, box-shadow;
@@ -438,7 +615,7 @@
             pointer-events: none;
         }
 
-        /* --- ZENTRALES COVER MIT LANGSAMER GLOW-ANIMATION --- */
+        /* --- ZENTRALES COVER IT LANGSAMER GLOW-ANIMATION --- */
         .cover-art.center {
             z-index: 20;
         }
@@ -735,47 +912,14 @@
             /* Gleiche Border */
             border-radius: 30px;
             /* Gleicher Radius wie Header */
-            padding: 40px 50px;
-            width: 500px;
-            margin: 0 auto;
-            /* EXAKT die gleichen mehrschichtigen Schatten wie Header */
-            box-shadow:
-                0 12px 35px var(--blue-glass-shadow),
-                /* Haupt-Schatten */
-                0 -2px 15px rgba(255, 255, 255, 0.1),
-                /* Reflexions-Licht */
-                -2px 0 10px rgba(255, 255, 255, 0.05),
-                /* Seitliche Reflexion links */
-                2px 0 10px rgba(255, 255, 255, 0.05),
-                /* Seitliche Reflexion rechts */
-                0 2px 8px var(--blue-glass-highlight) inset,
-                /* Inneres Highlight */
-                0 1px 0 rgba(255, 255, 255, 0.08) inset;
-            /* Innerer Rand */
-            /* Gleiche Transition wie Header */
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            /* Spiegelglanzlichter wie Header */
+            padding: 40px 80px;
+            display: inline-block;
+            color: #ffffff;
+            box-shadow: var(--blue-glass-shadow);
             position: relative;
             overflow: hidden;
         }
 
-        /* EXAKT die gleichen Hover-Effekte wie Header */
-        .counter-container:hover {
-            transform: scale(1.02);
-            backdrop-filter:
-                blur(60px)
-                /* StÃ¤rkerer Blur bei Hover wie Header */
-                saturate(1.3) contrast(1.15);
-            box-shadow:
-                0 15px 45px var(--blue-glass-shadow),
-                0 -3px 20px rgba(255, 255, 255, 0.2),
-                -3px 0 15px rgba(255, 255, 255, 0.1),
-                3px 0 15px rgba(255, 255, 255, 0.1),
-                0 3px 12px var(--blue-glass-highlight) inset,
-                0 1px 0 rgba(255, 255, 255, 0.12) inset;
-        }
-
-        /* EXAKT die gleichen Glanzlicht-Effekte wie Header */
         .counter-container::before {
             content: '';
             position: absolute;
@@ -783,2789 +927,174 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, transparent 70%);
             opacity: 0;
             transition: opacity 0.4s ease;
-            pointer-events: none;
         }
 
         .counter-container:hover::before {
             opacity: 1;
         }
 
-        .stat-label {
-            font-family: 'Outfit', sans-serif;
-            font-weight: 600;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            color: rgba(255, 255, 255, 0.9);
-            display: block;
-            margin-bottom: 12px;
-            white-space: nowrap;
-        }
-
         .counter-display {
-            font-family: 'Outfit', sans-serif;
-            font-weight: 800;
-            font-size: 3rem;
-            color: rgba(255, 255, 255, 0.9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            letter-spacing: -1px;
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.7), 0 0 15px rgba(255, 255, 255, 0.4);
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -0.05em;
+            margin-bottom: 8px;
+            color: #ffffff;
+            text-shadow: 0 0 25px rgba(255, 255, 255, 0.12);
+            position: relative;
+            z-index: 2;
         }
 
-        .about-container {
-            background-color: transparent;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 100px 0;
+        .stat-label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.72);
+            position: relative;
+            z-index: 2;
+        }
+
+        .creatives-section {
+            padding: 20px 20px 90px;
             position: relative;
             z-index: 10;
         }
 
-        .about-section {
-            /* Liquid Glass Container fÃ¼r die gesamte About Me Sektion */
-            max-width: 900px;
-            margin: 3rem auto;
-            padding: 3rem 2.5rem;
-            text-align: center;
-            /* Liquid Glass: Transparenz & Reflexion */
-            background: var(--blue-glass-bg);
-            backdrop-filter:
-                blur(20px)
-                /* Sanfte Verzerrung */
-                saturate(1.1)
-                /* Leichte Farbanpassung */
-                contrast(1.05);
-            border: 1px solid var(--blue-glass-border);
-            border-radius: 25px;
-            /* Mehrschichtige Reflexionen & Tiefe */
+        .creatives-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1.5rem;
+        }
+
+        .creative-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 28px;
+            padding: 1rem;
+            backdrop-filter: blur(18px) saturate(1.08) contrast(1.03);
             box-shadow:
-                0 8px 25px var(--blue-glass-shadow),
-                0 -2px 12px rgba(255, 255, 255, 0.08),
-                0 2px 8px var(--blue-glass-highlight) inset;
-            /* Dynamische Bewegung */
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            position: relative;
+                0 18px 40px rgba(0, 0, 0, 0.38),
+                0 -2px 16px rgba(255, 255, 255, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
             overflow: hidden;
         }
 
-        .about-section h2 {
-            font-family: 'Outfit', sans-serif;
-            font-style: normal;
-            font-weight: 700;
-            font-size: 1.2rem;
-            margin-bottom: 35px;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            color: var(--accent-cyan);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: transparent;
-            backdrop-filter: none;
-            border: none;
-            border-radius: 0;
-            padding: 0;
-            box-shadow: none;
-            text-align: center;
-        }
-
-        .about-section h2::before {
-            content: none;
-        }
-
-        #global-language-switch {
-            position: fixed;
-            top: 35px;
-            right: 28px;
-            z-index: 11000;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 14px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(24px) saturate(1.15) contrast(1.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 999px;
+        .creative-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(255, 255, 255, 0.14);
             box-shadow:
-                0 12px 30px rgba(0, 0, 0, 0.38),
+                0 24px 55px rgba(0, 0, 0, 0.44),
+                0 -4px 18px rgba(255, 255, 255, 0.1),
                 inset 0 1px 0 rgba(255, 255, 255, 0.08);
         }
 
-        .lang-switch-wrapper {
+        .creative-image {
+            display: block;
+            width: 100%;
+            aspect-ratio: 1273 / 1800;
+            object-fit: cover;
+            object-position: top;
+            border-radius: 18px;
+        }
+
+        .creative-meta {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            gap: 12px;
+            gap: 1rem;
+            margin-top: 0.95rem;
         }
 
-        .lang-label {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 0.85rem;
+        .creative-title {
+            font-size: 0.9rem;
             font-weight: 700;
-            transition: color 0.3s ease;
-            letter-spacing: 1px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.9);
         }
 
-        .lang-label.active {
-            color: #fff;
+        .creative-type {
+            font-size: 0.72rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.55);
+            white-space: nowrap;
         }
 
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 54px;
-            height: 30px;
+        .about-container {
+            padding: 80px 20px;
         }
 
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(255, 255, 255, 0.1);
-            transition: .4s;
-            border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(5px);
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 22px;
-            width: 22px;
-            left: 3px;
-            bottom: 3px;
-            background-color: #fff;
-            transition: .4s;
-            border-radius: 50%;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        }
-
-        input:checked+.slider {
-            background-color: rgba(255, 255, 255, 0.3);
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-
-        input:checked+.slider:before {
-            transform: translateX(24px);
-        }
-
-        /* Hover-Effekte fÃ¼r die gesamte About Me Container-Bubble */
-        .about-section:hover {
-            transform: translateY(-3px) scale(1.01);
-            backdrop-filter:
-                blur(28px) saturate(1.15) contrast(1.08);
-            box-shadow:
-                0 15px 45px var(--blue-glass-shadow),
-                0 -4px 25px rgba(255, 255, 255, 0.2),
-                0 4px 15px var(--blue-glass-highlight) inset;
-        }
-
-        /* Keine Textbewegungen beim Hover - ruhiger Stil */
-
-        /* Spiegelglanzlicht fÃ¼r die Container-Bubble */
-        .about-section::before {
-            content: '';
-            position: absolute;
-            top: -30%;
-            left: -30%;
-            width: 160%;
-            height: 160%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            pointer-events: none;
-        }
-
-        .about-section:hover::before {
-            opacity: 1;
-        }
-
-        /* About Me Content Container */
-        .about-content {
-            max-width: 800px;
+        .about-section {
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 0 2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 28px;
+            padding: 2.5rem 2.2rem;
+            backdrop-filter: blur(24px) saturate(1.08) contrast(1.02);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4), 0 -2px 18px rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.06);
         }
 
-        /* Einheitlicher Stil fÃ¼r alle About Me AbsÃ¤tze */
-        .about-content p {
-            font-family: 'Outfit', sans-serif;
-            font-weight: 500;
-            font-size: 1.2rem;
-            line-height: 1.7;
-            color: rgba(255, 255, 255, 0.95);
-            margin-bottom: 1.5rem;
-            text-align: left;
-        }
-
-        .about-intro strong {
-            color: var(--accent-cyan);
+        .about-section h2 {
+            font-size: 1rem;
             font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 28px;
+        }
+
+        .about-content {
+            padding: 0;
+        }
+
+        .about-content p {
+            font-size: 1.08rem;
+            line-height: 1.9;
+            color: rgba(255, 255, 255, 0.88);
+            margin-bottom: 1.15rem;
         }
 
         footer {
-            background-color: var(--bg-color);
-            padding: 60px 20px;
-            font-size: 0.8rem;
-            color: #444;
+            padding: 60px 20px 80px;
             text-align: center;
+            color: rgba(255, 255, 255, 0.55);
+            font-size: 0.85rem;
         }
 
-        /* --- IMPRESSUM MODAL STYLES --- */
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+            border-bottom-color: rgba(255, 255, 255, 0.55);
+        }
+
+        #cv-modal,
         #impressum-modal {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
-            z-index: 5000;
-            overflow-y: auto;
-            display: none;
-            backdrop-filter: blur(25px) saturate(180%) contrast(1.2);
-            -webkit-backdrop-filter: blur(25px) saturate(180%) contrast(1.2);
-        }
-
-        #impressum-modal.visible {
-            display: block;
-        }
-
-        .impressum-content {
-            max-width: 900px;
-            margin: 40px auto;
-            position: relative;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(50px) saturate(200%) contrast(1.3);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 25px;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
-            padding: 30px;
-        }
-
-        .impressum-content h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: #fff;
-        }
-
-        .impressum-content h2 {
-            font-size: 1.5rem;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            color: #fff;
-        }
-
-        .impressum-content p,
-        .impressum-content address {
-            line-height: 1.6;
-            margin-bottom: 15px;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 20px;
-            right: 25px;
-            width: 40px;
-            height: 40px;
-            color: #ffffff;
-            font-size: 2rem;
-            font-weight: 300;
-            cursor: pointer !important;
-            opacity: 0.8;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            line-height: 1;
-            z-index: 10001;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .close-btn:hover {
-            opacity: 1;
-            background: rgba(255, 255, 255, 0.15);
-            transform: scale(1.1);
-        }
-
-        /* CV Specific Normalization */
-        .cv-name {
-            font-size: 3.5rem !important;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: -1px;
-            line-height: 1 !important;
-            color: #fff !important;
-            margin: 0;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-        }
-
-        .cv-h2 {
-            font-size: 0.9rem !important;
-            text-transform: uppercase !important;
-            letter-spacing: 3px !important;
-            font-weight: 700 !important;
-            color: #ffffff !important;
-            margin-bottom: 15px !important;
-            display: flex !important;
-            align-items: center !important;
-            padding: 0 !important;
-            background: transparent !important;
-            border: none !important;
-            box-shadow: none !important;
-        }
-
-        .cv-h3 {
-            font-size: 1rem !important;
-            font-weight: 600 !important;
-            color: #fff !important;
-            margin-bottom: 10px !important;
-        }
-
-        /* --- STICKY WRAPPER --- */
-        #sticky-wrapper {
-            position: sticky;
-            top: 35px;
-            display: block;
-            width: 100%;
-            z-index: 10000;
-            /* Sicherstellen, dass der Wrapper Ã¼ber anderen Elementen liegt */
-        }
-
-        /* --- LIQUID GLASS NAVIGATION HEADER --- */
-        #liquid-nav {
-            position: relative;
-            /* Nicht mehr sticky, da der Wrapper sticky ist */
-            left: 50%;
-            transform: translateX(-50%);
-            width: fit-content;
-            display: block;
-            /* Liquid Glass: Transparenz & Reflexion - dickes, klares Glas */
-            backdrop-filter:
-                blur(50px)
-                /* StÃ¤rkere Verzerrung fÃ¼r intensiveren Glaseffekt */
-                saturate(1.1)
-                /* Leichte Farbanpassung */
-                contrast(1.05);
-            background: var(--blue-glass-bg);
-            border: 1px solid var(--blue-glass-border);
-            border-radius: 30px;
-            /* Mehrschichtige Reflexionen & Tiefe */
-            box-shadow:
-                /* Haupt-Schatten fÃ¼r Glas-Dicke */
-                0 12px 35px var(--blue-glass-shadow),
-                /* Reflexions-Licht von oben */
-                0 -2px 15px rgba(255, 255, 255, 0.1),
-                /* Seitliche Reflexionen */
-                -2px 0 10px rgba(255, 255, 255, 0.05),
-                2px 0 10px rgba(255, 255, 255, 0.05),
-                /* Innere Highlights fÃ¼r Tiefe */
-                0 2px 8px var(--blue-glass-highlight) inset,
-                0 1px 0 rgba(255, 255, 255, 0.08) inset;
-            /* Dynamische Bewegung: flÃ¼ssige ÃœbergÃ¤nge */
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            /* Spiegelglanzlichter bei Hover */
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Spiegelglanzlicht-Animation bei Hover */
-        #liquid-nav::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            pointer-events: none;
-        }
-
-        #liquid-nav:hover::before {
-            opacity: 1;
-        }
-
-        #liquid-nav:hover {
-            transform: translateX(-50%) translateY(-2px) scale(1.02);
-            backdrop-filter:
-                blur(60px)
-                /* StÃ¤rkerer Blur bei Hover */
-                saturate(1.3) contrast(1.15);
-            box-shadow:
-                0 15px 45px rgba(0, 0, 0, 0.6),
-                0 -3px 20px rgba(255, 255, 255, 0.2),
-                -3px 0 15px rgba(255, 255, 255, 0.1),
-                3px 0 15px rgba(255, 255, 255, 0.1),
-                0 3px 12px var(--blue-glass-highlight) inset,
-                0 1px 0 rgba(255, 255, 255, 0.12) inset;
-        }
-
-        .nav-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0 1.5rem;
-        }
-
-
-        .nav-links {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: nowrap;
-            white-space: nowrap;
-        }
-
-        .nav-link {
-            font-family: 'Outfit', sans-serif;
-            font-weight: 600;
-            font-size: 0.85rem;
-            text-decoration: none;
-            color: rgba(255, 255, 255, 0.9);
-            padding: 0.8rem 1.5rem;
-            border-radius: 0;
-            white-space: nowrap;
-            background: transparent;
-            border: none;
-            transition: color 0.3s ease;
-        }
-
-
-        .nav-link:hover {
-            color: var(--text-color);
-        }
-
-        .nav-link.active {
-            color: var(--text-color);
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.7), 0 0 15px rgba(255, 255, 255, 0.4);
-            /* WeiÃŸer Glow */
-        }
-
-        /* Responsive Liquid Glass Design */
-        @media (max-width: 768px) {
-            #liquid-nav {
-                width: 350px;
-                backdrop-filter:
-                    blur(30px) saturate(1.1) contrast(1.05);
-                border-radius: 25px;
-            }
-
-            .nav-container {
-                height: 45px;
-                padding: 0 1rem;
-            }
-
-            .nav-links {
-                gap: 0.5rem;
-                flex-wrap: nowrap;
-            }
-
-            .nav-link {
-                padding: 0.6rem 1rem;
-                font-size: 0.8rem;
-            }
-
-            .section-title,
-            .about-section h2 {
-                backdrop-filter:
-                    blur(20px) saturate(1.1) contrast(1.05);
-                border-radius: 30px;
-            }
-
-            .section-title::before,
-            .about-section h2::before {
-                width: 140%;
-                height: 140%;
-            }
-
-            .app-feature-card {
-                grid-template-columns: 1fr;
-                padding: 2rem 1.5rem;
-                align-items: start;
-            }
-
-            .app-preview {
-                min-height: 360px;
-            }
-
-            .app-screenshot-frame {
-                width: 250px;
-                transform: rotate(6deg);
-            }
-
-            #global-language-switch {
-                top: 35px;
-                right: 16px;
-                padding: 8px 12px;
-                gap: 10px;
-            }
-        }
-
-        /* Responsive Liquid Glass Section Titles */
-        @media (max-width: 480px) {
-            #liquid-nav {
-                width: 320px;
-                backdrop-filter:
-                    blur(25px) saturate(1.05) contrast(1.02);
-                border-radius: 20px;
-            }
-
-            .nav-container {
-                height: 40px;
-                padding: 0 0.8rem;
-            }
-
-            .nav-links {
-                gap: 0.3rem;
-                flex-wrap: nowrap;
-            }
-
-            .nav-link {
-                padding: 0.5rem 0.6rem;
-                font-size: 0.75rem;
-            }
-
-            .section-title,
-            .about-section h2 {
-                font-size: 0.7rem;
-                padding: 0.8rem 1.2rem;
-                border-radius: 25px;
-                backdrop-filter:
-                    blur(15px) saturate(1.05) contrast(1.02);
-            }
-
-            .section-title::before,
-            .about-section h2::before {
-                width: 130%;
-                height: 130%;
-                left: -15%;
-                top: -15%;
-            }
-
-            .app-feature-section {
-                padding: 10px 14px 70px;
-            }
-
-            .app-feature-copy h2 {
-                font-size: 2.4rem;
-            }
-
-            .app-feature-logo {
-                width: min(100%, 400px);
-                margin-top: -6px;
-                margin-bottom: -2px;
-            }
-
-            #global-language-switch {
-                top: 35px;
-                right: 12px;
-                transform: scale(0.92);
-                transform-origin: top right;
-            }
-
-            .app-feature-subtitle {
-                font-size: 1rem;
-            }
-
-            .app-feature-description {
-                font-size: 0.96rem;
-                line-height: 1.65;
-            }
-
-            .app-feature-cta {
-                width: 100%;
-                justify-content: center;
-                text-align: center;
-            }
-
-            .app-preview {
-                min-height: 320px;
-            }
-
-            .app-screenshot-frame {
-                width: 220px;
-                padding: 11px;
-            }
-
-            .app-screenshot-frame::before {
-                width: 94px;
-                height: 20px;
-            }
-        }
-
-        /* CV MODAL SPECIFIC STYLES */
-        #cv-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.4);
-            /* Overlay hinter dem Popup */
-            z-index: 20000;
-            overflow-y: auto;
-            display: none;
-        }
-
-        #cv-modal.visible {
-            display: block;
-        }
-
-        .cv-container-inner {
-            max-width: 900px;
-            margin: 80px auto;
-            /* Mehr Abstand oben/unten, damit es schwebt */
-            position: relative;
-            padding: 0 20px;
-            /* Falls Bildschirm klein wird, hat es Rand */
-        }
-
-        .cv-page {
-            width: 100% !important;
-            max-width: 210mm;
-            min-height: 297mm;
-            margin: 0 auto;
-            background: rgba(10, 10, 10, 0.9);
-            /* Sehr dunkel, kaum durchsichtig */
-            backdrop-filter: blur(20px) saturate(150%) contrast(1.1);
-            -webkit-backdrop-filter: blur(20px) saturate(150%) contrast(1.1);
-            position: relative;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            border-radius: 20px;
-        }
-
-        .content-wrapper-cv {
-            position: relative;
-            z-index: 10;
-            padding: 40px;
-            display: grid;
-            grid-template-columns: 35% 60%;
-            gap: 5%;
-        }
-
-        .header-section-cv {
-            grid-column: 1 / -1;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* CV Specific Normalization */
-        .cv-name {
-            font-size: 5.5rem !important;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: -2px;
-            line-height: 1 !important;
-            color: #fff !important;
-            margin: 0;
-            text-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
-        }
-
-        .cv-h2 {
-            font-size: 1rem !important;
-            text-transform: uppercase !important;
-            letter-spacing: 3px !important;
-            font-weight: 700 !important;
-            color: #ffffff !important;
-            margin-bottom: 21px !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            padding: 0 !important;
-            background: transparent !important;
-            border: none !important;
-            box-shadow: none !important;
-        }
-
-        .cv-h2::before {
-            content: '';
-            display: inline-block;
-            width: 4px;
-            height: 4px;
-            background: #ffffff;
-            border-radius: 50%;
-            margin-right: 10px;
-            box-shadow: 0 0 8px #ffffff;
-        }
-
-        .cv-h3 {
-            font-size: 1.1rem !important;
-            font-weight: 600 !important;
-            color: #fff !important;
-            margin-bottom: 8px !important;
-            text-transform: none !important;
-            letter-spacing: 0 !important;
-        }
-
-        .content-wrapper-cv {
-            position: relative;
-            z-index: 10;
-            padding: 55px;
-            display: grid;
-            grid-template-columns: 35% 60%;
-            gap: 5%;
-        }
-
-        .glass-card-cv {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px) saturate(180%);
-            -webkit-backdrop-filter: blur(16px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-top: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            padding: 21px;
-            margin-bottom: 34px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.02);
-        }
-
-        .timeline-item {
-            position: relative;
-            padding-left: 21px;
-            margin-bottom: 34px;
-            border-left: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -3px;
-            top: 6px;
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: #fff;
-            box-shadow: 0 0 8px #fff;
-        }
-
-        .date-cv {
-            font-size: 0.75rem;
-            color: #ffffff;
-            margin-bottom: 8px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .skill-tag {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 6px 14px;
-            border-radius: 100px;
-            font-size: 0.8rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.6);
-            display: inline-block;
-            margin: 0 4px 8px 0;
-        }
-
-        .skill-tag.highlight {
-            border-color: rgba(255, 255, 255, 0.5);
-            color: #fff;
-        }
-
-        .timeline-item {
-            position: relative;
-            padding-left: 24px;
-            margin-bottom: 30px;
-            border-left: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -3px;
-            top: 6px;
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: #fff;
-            box-shadow: 0 0 8px #fff;
-        }
-
-        .date-cv {
-            font-size: 0.75rem;
-            color: #ffffff;
-            margin-bottom: 8px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .role-cv {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.5);
-            font-style: italic;
-            margin-bottom: 12px;
-        }
-
-        .cv-p {
-            font-size: 0.9rem;
-            line-height: 1.6;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .glass-overlay-cv {
-            position: absolute;
             inset: 0;
-            z-index: 2;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, transparent 100%);
-            pointer-events: none;
-        }
-
-        .footer-date-cv {
-            position: absolute;
-            bottom: 24px;
-            right: 24px;
-            font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.2);
-            text-transform: uppercase;
-        }
-
-        .contact-info p {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin-bottom: 12px;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
-        .contact-icon {
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
-        @media (max-width: 900px) {
-            .content-wrapper-cv {
-                grid-template-columns: 1fr;
-            }
-
-            .cv-container-inner {
-                margin: 0;
-            }
-
-            .cv-page {
-                border-radius: 0;
-                border: none;
-            }
-        }
-
-        @media (max-width: 768px) {
-            body {
-                overflow-x: hidden;
-            }
-
-            .orb {
-                filter: blur(90px);
-                opacity: 0.38;
-            }
-
-            #sticky-wrapper {
-                top: 16px;
-            }
-
-            #liquid-nav {
-                width: calc(100% - 24px);
-                max-width: none;
-                border-radius: 18px;
-            }
-
-            .nav-container {
-                height: 42px;
-                padding: 0 0.45rem;
-            }
-
-            .nav-links {
-                width: 100%;
-                justify-content: space-between;
-                gap: 0.1rem;
-            }
-
-            .nav-link {
-                flex: 1;
-                text-align: center;
-                font-size: 0.62rem;
-                padding: 0.62rem 0.1rem;
-            }
-
-            #global-language-switch {
-                top: 66px;
-                right: 16px;
-                padding: 6px 10px;
-            }
-
-            .lang-label {
-                font-size: 0.66rem;
-                letter-spacing: 0.8px;
-            }
-
-            .toggle-switch {
-                width: 42px;
-                height: 24px;
-            }
-
-            .slider:before {
-                width: 16px;
-                height: 16px;
-                left: 3px;
-                bottom: 3px;
-            }
-
-            input:checked+.slider:before {
-                transform: translateX(18px);
-            }
-
-            #mainHeader {
-                margin-top: 108px;
-                min-height: auto;
-                height: auto;
-                font-size: 13.2vw;
-                padding: 1.15rem 16px 0.35rem;
-            }
-
-            .header-line {
-                line-height: 0.88;
-                padding-left: 0;
-                white-space: nowrap;
-            }
-
-            .subtitle-container {
-                position: relative;
-                top: auto;
-                left: auto;
-                margin-top: 0.35rem;
-                padding-left: 0;
-            }
-
-            .subtitle {
-                font-size: clamp(2.05rem, 8.8vw, 2.7rem);
-                white-space: nowrap;
-                line-height: 0.95;
-            }
-
-            .subtitle.outline {
-                display: none;
-            }
-
-            .section-title {
-                margin-top: 22px;
-                margin-bottom: 12px;
-                font-size: 0.68rem;
-                letter-spacing: 2.8px;
-                padding: 0.72rem 1rem;
-            }
-
-            #scene-container {
-                height: 260px;
-                min-height: 260px;
-            }
-
-            .carousel-section {
-                height: 290px;
-                padding: 10px 0 26px;
-            }
-
-            .carousel-track {
-                height: 180px;
-            }
-
-            .cover-art {
-                width: 132px;
-                height: 132px;
-            }
-
-            .nav-arrows {
-                top: auto;
-                bottom: 6px;
-                transform: none;
-                padding: 0 18px;
-            }
-
-            .arrow {
-                width: 42px;
-                height: 26px;
-            }
-
-            .stream-counter-section {
-                margin: 20px 0 38px;
-                padding: 0 16px;
-            }
-
-            .counter-container {
-                width: 100%;
-                padding: 26px 22px;
-                border-radius: 24px;
-            }
-
-            .stat-label {
-                font-size: 0.74rem;
-                letter-spacing: 1px;
-            }
-
-            .counter-display {
-                font-size: clamp(1.9rem, 8vw, 2.6rem);
-            }
-
-            .app-feature-section {
-                padding: 0 16px 56px;
-            }
-
-            .app-feature-card {
-                padding: 1.25rem;
-                border-radius: 24px;
-                gap: 1rem;
-            }
-
-            .app-feature-copy {
-                padding-top: 0;
-            }
-
-            .app-feature-kicker {
-                font-size: 0.68rem;
-                letter-spacing: 2px;
-                margin-bottom: 8px;
-            }
-
-            .app-feature-logo {
-                width: min(100%, 330px);
-                margin-top: -4px;
-                margin-bottom: -10px;
-            }
-
-            .app-feature-subtitle {
-                font-size: 1rem;
-                margin-bottom: 0.85rem;
-            }
-
-            .app-feature-description {
-                font-size: 0.96rem;
-                line-height: 1.65;
-                margin-bottom: 1.2rem;
-            }
-
-            .app-feature-cta {
-                width: 100%;
-                justify-content: center;
-                padding: 0.88rem 1rem;
-                font-size: 0.8rem;
-            }
-
-            .app-preview {
-                min-height: 240px;
-            }
-
-            .app-screenshot-frame {
-                width: 188px;
-                padding: 10px;
-                transform: rotate(5deg);
-            }
-
-            .app-screenshot-frame::before {
-                width: 88px;
-                height: 18px;
-            }
-
-            .about-container {
-                padding: 56px 16px;
-            }
-
-            .about-section {
-                margin: 0 auto;
-                padding: 1.6rem 1.2rem;
-                border-radius: 22px;
-            }
-
-            .about-section h2 {
-                font-size: 0.95rem;
-                letter-spacing: 3px;
-                margin-bottom: 24px;
-            }
-
-            .about-content {
-                padding: 0;
-            }
-
-            .about-content p {
-                font-size: 1rem;
-                line-height: 1.7;
-                margin-bottom: 1rem;
-            }
-
-            footer {
-                padding: 40px 16px 60px;
-            }
-
-            .cv-container-inner {
-                padding: 0 8px;
-            }
-
-            .cv-page {
-                min-height: auto;
-                border-radius: 18px;
-            }
-
-            .content-wrapper-cv {
-                padding: 24px 18px 54px;
-                gap: 18px;
-            }
-
-            .cv-name {
-                font-size: 2.35rem !important;
-                letter-spacing: -1px;
-            }
-
-            .glass-card-cv {
-                padding: 16px;
-                margin-bottom: 18px;
-            }
-
-            .cv-h2 {
-                font-size: 0.8rem !important;
-                letter-spacing: 2px !important;
-                justify-content: flex-start !important;
-            }
-
-            .cv-h3 {
-                font-size: 0.95rem !important;
-            }
-
-            .contact-info p,
-            .cv-p,
-            .role-cv {
-                font-size: 0.82rem;
-            }
-
-            .timeline-item {
-                padding-left: 16px;
-                margin-bottom: 24px;
-            }
-
-            .footer-date-cv {
-                position: static;
-                display: block;
-                margin-top: 8px;
-                padding: 0 18px 18px;
-                text-align: right;
-            }
-        }
-
-        @media (max-width: 480px) {
-            #liquid-nav {
-                width: calc(100% - 20px);
-            }
-
-            .nav-container {
-                height: 40px;
-                padding: 0 0.35rem;
-            }
-
-            .nav-link {
-                font-size: 0.56rem;
-                padding: 0.58rem 0.08rem;
-            }
-
-            #global-language-switch {
-                top: 62px;
-                right: 10px;
-                padding: 5px 8px;
-                transform: none;
-            }
-
-            .lang-label {
-                font-size: 0.6rem;
-            }
-
-            .toggle-switch {
-                width: 36px;
-                height: 20px;
-            }
-
-            .slider:before {
-                width: 14px;
-                height: 14px;
-                left: 2px;
-                bottom: 2px;
-            }
-
-            input:checked+.slider:before {
-                transform: translateX(16px);
-            }
-
-            #mainHeader {
-                margin-top: 102px;
-                font-size: 14vw;
-                padding: 1rem 12px 0.2rem;
-            }
-
-            .subtitle {
-                font-size: clamp(1.85rem, 8.6vw, 2.3rem);
-            }
-
-            #scene-container {
-                height: 210px;
-                min-height: 210px;
-            }
-
-            .carousel-section {
-                height: 250px;
-            }
-
-            .carousel-track {
-                height: 150px;
-            }
-
-            .cover-art {
-                width: 112px;
-                height: 112px;
-            }
-
-            .stream-counter-section {
-                margin: 26px 0 42px;
-                padding: 0 12px;
-            }
-
-            .counter-container {
-                padding: 22px 16px;
-            }
-
-            .stat-label {
-                font-size: 0.68rem;
-            }
-
-            .counter-display {
-                font-size: 1.7rem;
-            }
-
-            .app-feature-section {
-                padding: 0 12px 48px;
-            }
-
-            .app-feature-card {
-                padding: 1rem;
-                border-radius: 20px;
-            }
-
-            .app-feature-logo {
-                width: min(100%, 280px);
-                margin-bottom: -12px;
-            }
-
-            .app-feature-description {
-                font-size: 0.92rem;
-            }
-
-            .app-preview {
-                min-height: 210px;
-            }
-
-            .app-screenshot-frame {
-                width: 164px;
-                padding: 8px;
-            }
-
-            .app-screenshot-frame::before {
-                top: 8px;
-                width: 72px;
-                height: 16px;
-            }
-
-            .about-container {
-                padding: 48px 12px;
-            }
-
-            .about-section {
-                padding: 1.35rem 1rem;
-            }
-
-            .about-section h2 {
-                font-size: 0.86rem;
-                letter-spacing: 2.5px;
-            }
-
-            .about-content p {
-                font-size: 0.95rem;
-            }
-
-            .orb-3 {
-                display: none;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="orb-container">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-    </div>
-
-    <div id="global-language-switch">
-        <div class="lang-switch-wrapper">
-            <span class="lang-label active" id="global-label-de">DE</span>
-            <label class="toggle-switch">
-                <input type="checkbox" id="globalLangToggle">
-                <span class="slider"></span>
-            </label>
-            <span class="lang-label" id="global-label-en">EN</span>
-        </div>
-    </div>
-
-    <!-- STICKY WRAPPER for LIQUID GLASS NAVIGATION HEADER -->
-    <div id="sticky-wrapper">
-        <!-- STICKY WRAPPER for LIQUID GLASS NAVIGATION HEADER -->
-        <div id="sticky-wrapper">
-            <nav id="liquid-nav">
-                <div class="nav-container">
-                    <div class="nav-links">
-                        <a href="#scene-container" class="nav-link" data-section="work">MY WORK</a>
-                        <a href="#about-anchor" class="nav-link" data-section="about">ABOUT ME</a>
-                        <a href="#cv-modal" id="nav-cv" class="nav-link" data-section="cv">LEBENSLAUF</a>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </div>
-
-    <header id="mainHeader">
-        <div class="header-line" id="line1" data-text="DUSTIN">DUSTIN</div>
-        <div class="header-line" id="line2" data-text="SEEHAWER">SEEHAWER</div>
-
-        <div class="subtitle-container" id="subtitleContainer">
-            <div class="subtitle subtitle-flash" id="subtitleFilled">ART & DESIGN</div>
-            <div class="subtitle outline" id="subtitleOutline">ART & DESIGN</div>
-
-        </div>
-
-
-    </header>
-
-    <div class="section-title">MY WORK</div>
-    <section id="scene-container"></section>
-
-    <section class="carousel-section">
-        <div class="carousel-track" id="track"></div>
-        <div class="nav-arrows">
-            <div class="arrow" id="prevBtn">
-                <svg viewBox="0 0 50 30">
-                    <polyline points="20 0 5 15 20 30" />
-                    <line x1="5" y1="15" x2="50" y2="15" />
-                </svg>
-
-
-            </div>
-            <div class="arrow" id="nextBtn">
-                <svg viewBox="0 0 50 30">
-                    <polyline points="30 0 45 15 30 30" />
-                    <line x1="0" y1="15" x2="45" y2="15" />
-                </svg>
-            </div>
-        </div>
-    </section>
-
-    <!-- LIQUID GLASS STYLE STREAM COUNTER -->
-    <section class="stream-counter-section">
-        <div class="counter-container">
-            <span class="stat-label">Gesamte Streams</span>
-            <div class="counter-display">
-                <span id="total-stream-counter" data-target="300000000">0</span>
-            </div>
-        </div>
-    </section>
-
-    <section class="app-feature-section" id="app-feature">
-        <a class="app-feature-card" href="https://apps.apple.com/de/app/astrohabit-routine-tracker/id6758913707"
-            target="_blank" rel="noopener noreferrer" aria-label="AstroHabit im App Store ansehen">
-            <div class="app-feature-copy">
-                <span class="app-feature-kicker">Selbst programmierte App</span>
-                <img class="app-feature-logo" src="assets/images/AstroHabitsLogo.png" alt="AstroHabit Logo">
-                <p class="app-feature-subtitle">Routine &amp; Tracker</p>
-                <p class="app-feature-description">
-                    AstroHabit ist ein Habit Tracker, den ich mithilfe von KI programmiert und designt habe. Die App
-                    ist im App Store von Apple verfÃ¼gbar und verbindet klare Routinen mit einer modernen, ruhigen
-                    User Experience.
-                </p>
-                <div class="app-feature-cta">
-                    <span>Im App Store ansehen</span>
-                    <span class="app-feature-cta-arrow">â†—</span>
-                </div>
-            </div>
-
-            <div class="app-preview" aria-hidden="true">
-                <div class="app-preview-glow"></div>
-                <div class="app-screenshot-frame">
-                    <img class="app-screenshot-image" src="assets/images/App_Screenshot.png"
-                        alt="Screenshot der AstroHabit App">
-                </div>
-            </div>
-        </a>
-    </section>
-
-    <div class="about-container" id="about-anchor">
-        <section id="about-section" class="about-section">
-
-
-            <h2>About Me</h2>
-
-            <div class="about-content">
-                <div id="about-text-de">
-                    <p class="about-intro">
-                        Mein Name ist <strong>Dustin</strong>, ich bin 23 Jahre alt und Designer aus Leidenschaft.
-                    </p>
-                    <p>
-                        Ob Cover fÃ¼r Musik, Streetwear oder Goldplatten â€“ ich liebe es, kreative Ideen visuell
-                        umzusetzen
-                        und einzigartige Designs zu erschaffen.
-                    </p>
-                    <p>
-                        Seit Ã¼ber 10 Jahren designe ich bereits und habe dabei zahlreiche Kunden glÃ¼cklich machen
-                        kÃ¶nnen.
-                    </p>
-                </div>
-                <div id="about-text-en" style="display: none;">
-                    <p class="about-intro">
-                        My name is <strong>Dustin</strong>, I am 23 years old and a passionate designer.
-                    </p>
-                    <p>
-                        Whether it's covers for music, streetwear or gold records â€“ I love visualizing creative ideas
-                        and creating unique designs.
-                    </p>
-                    <p>
-                        I have been designing for over 10 years and have been able to make numerous clients happy.
-                    </p>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <footer>
-        <p>Â© 2025 Dustin Seehawer.
-            <a href="#" id="impressumLink" style="color:#666; margin-left:10px;">Impressum</a>
-        </p>
-    </footer>
-
-    <div id="cv-modal">
-        <div class="cv-container-inner">
-            <div class="page cv-page">
-                <a href="#" class="close-btn" id="closeCvBtn" aria-label="Lebenslauf schlieÃŸen"
-                    style="z-index: 2000;">Ã—</a>
-
-                <div class="content-wrapper-cv" id="cv-content-de">
-
-                    <header class="header-section-cv">
-                        <div>
-                            <h1 class="cv-name">Dustin Seehawer</h1>
-                        </div>
-                    </header>
-
-                    <aside class="sidebar-cv">
-                        <div class="glass-card-cv">
-                            <h2 class="cv-h2">Kontakt</h2>
-                            <div class="contact-info">
-                                <p><span class="contact-icon">ğŸ‚</span> 18.10.2002</p>
-                                <p class="email-row"><span class="contact-icon">âœ‰ï¸</span> dustinseehawer@icloud.com</p>
-                            </div>
-                        </div>
-
-                        <div class="glass-card-cv">
-                            <h2 class="cv-h2">Kompetenzen</h2>
-                            <h3 class="cv-h3">Software</h3>
-                            <div class="skills-container" style="margin-bottom: 24px;">
-                                <span class="skill-tag highlight">Adobe Photoshop</span>
-                                <span class="skill-tag">Generative AI Tools</span>
-                                <span class="skill-tag">MS Office</span>
-                            </div>
-
-                            <h3 class="cv-h3">Soft Skills</h3>
-                            <div class="skills-container">
-                                <span class="skill-tag">ZuverlÃ¤ssig</span>
-                                <span class="skill-tag">AnpassungsfÃ¤hig</span>
-                                <span class="skill-tag">Lernbereit</span>
-                            </div>
-                        </div>
-
-                        <div class="glass-card-cv">
-                            <h2 class="cv-h2">Sprachen</h2>
-
-                            <div id="cv-langs-de">
-                                <p style="color:rgba(255,255,255,0.6); margin-bottom:4px;"><strong
-                                        style="color:white;">Deutsch:</strong> Muttersprache</p>
-                                <p style="color:rgba(255,255,255,0.6);"><strong style="color:white;">Englisch:</strong>
-                                    Sehr
-                                    gute Kenntnisse</p>
-                            </div>
-                        </div>
-                    </aside>
-
-                    <section class="main-content-cv">
-                        <div class="glass-card-cv">
-                            <h2 class="cv-h2">Beruflicher Werdegang</h2>
-                            <div class="timeline-item">
-                                <div class="date-cv">08/2023 â€“ 01/2026</div>
-                                <h3 class="cv-h3">Ausbildung: Industriekaufmann</h3>
-                                <div class="role-cv">Berufskolleg des MÃ¤rkischen Kreises, Iserlohn</div>
-                                <p class="cv-p">Fokus auf kaufmÃ¤nnische Prozesse und industrielle Strukturen.</p>
-                            </div>
-
-                            <div class="timeline-item">
-                                <div class="date-cv">07/2022 â€“ 07/2023</div>
-                                <h3 class="cv-h3">Freelance Grafikdesigner</h3>
-                                <div class="role-cv">SelbststÃ¤ndig</div>
-                                <p class="cv-p">Entwicklung visueller Konzepte, Bildbearbeitung und kreative Gestaltung
-                                    fÃ¼r diverse Projekte.</p>
-                            </div>
-                        </div>
-
-                        <div class="glass-card-cv">
-                            <h2 class="cv-h2">Schulbildung</h2>
-                            <div class="timeline-item">
-                                <div class="date-cv">09/2013 â€“ 06/2022</div>
-                                <h3 class="cv-h3">Allgemeine Hochschulreife</h3>
-                                <div class="role-cv">MÃ¤rkisches Gymnasium Iserlohn</div>
-                            </div>
-
-                            <div class="timeline-item">
-                                <div class="date-cv">08/2009 â€“ 07/2013</div>
-                                <h3 class="cv-h3">Grundschule</h3>
-                                <div class="role-cv">Grundschule im Wiesengrund, Iserlohn</div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <div class="footer-date-cv">Iserlohn, 24.01.2026</div>
-                </div>
-
-                <!-- ENGLISH CV CONTENT -->
-                <div class="content-wrapper-cv" id="cv-content-en" style="display: none;">
-                    <header class="header-section-cv">
-                        <div>
-                            <h1 class="cv-name">Dustin Seehawer</h1>
-                        </div>
-                    </header>
-                    <aside class="sidebar-cv">
-                        <div class="glass-card-cv">
-                            <h2 class="cv-h2">Contact</h2>
-                            <div class="contact-info">
-                                <p><span class="contact-icon">ğŸ‚</span> Oct 18, 2002</p>
-                                <p class="email-row"><span class="contact-icon">âœ‰ï¸</span> dustinseehawer@icloud.com</p>
-                            </div>
-                        </div>
-                        <div class="glass-card-cv">
-                            <h2 class="cv-h2">Skills</h2>
-                            <h3 class="cv-h3">Software</h3>
-                            <div class="skills-container" style="margin-bottom: 24px;">
-                                <span class="skill-tag highlight">Adobe Photoshop</span>
-                                <span class="skill-tag">Generative AI Tools</span>
-                                <span class="skill-tag">MS Office</span>
-                            </div>
-                            <h3 class="cv-h3">Soft Skills</h3>
-                            <div class="skills-container">
-                                <span class="skill-tag">Reliable</span>
-                                <span class="skill-tag">Adaptable</span>
-                                <span class="skill-tag">Eager to learn</span>
-                            </div>
-                        </div>
-                        <div class="glass-card-cv">
-                            <h2 class="cv-h2">Languages</h2>
-                            <div id="cv-langs-en">
-                                <p style="color:rgba(255,255,255,0.6); margin-bottom:4px;"><strong
-                                        style="color:white;">German:</strong> Native speaker</p>
-                                <p style="color:rgba(255,255,255,0.6);"><strong style="color:white;">English:</strong>
-                                    Highly proficient</p>
-                            </div>
-                        </div>
-                    </aside>
-                    <section class="main-content-cv">
-                        <div class="glass-card-cv">
-                            <h2 class="cv-h2">Experience</h2>
-                            <div class="timeline-item">
-                                <div class="date-cv">08/2023 â€“ 01/2026</div>
-                                <h3 class="cv-h3">Apprenticeship: Industrial Clerk</h3>
-                                <div class="role-cv">Berufskolleg des MÃ¤rkischen Kreises, Iserlohn</div>
-                                <p class="cv-p">Focus on commercial processes and industrial structures.</p>
-                            </div>
-                            <div class="timeline-item">
-                                <div class="date-cv">07/2022 â€“ 07/2023</div>
-                                <h3 class="cv-h3">Freelance Graphic Designer</h3>
-                                <div class="role-cv">Self-employed</div>
-                                <p class="cv-p">Development of visual concepts, image editing, and creative design for
-                                    various projects.</p>
-                            </div>
-                        </div>
-                        <div class="glass-card-cv">
-                            <h2 class="cv-h2">Education</h2>
-                            <div class="timeline-item">
-                                <div class="date-cv">09/2013 â€“ 06/2022</div>
-                                <h3 class="cv-h3">A-Levels (Abitur)</h3>
-                                <div class="role-cv">MÃ¤rkisches Gymnasium Iserlohn</div>
-                            </div>
-                            <div class="timeline-item">
-                                <div class="date-cv">08/2009 â€“ 07/2013</div>
-                                <h3 class="cv-h3">Primary School</h3>
-                                <div class="role-cv">Grundschule im Wiesengrund, Iserlohn</div>
-                            </div>
-                        </div>
-                    </section>
-                    <div class="footer-date-cv">Iserlohn, Jan 24, 2026</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="impressum-modal">
-        <div class="impressum-content">
-            <a href="#" class="close-btn" id="closeImpressumBtn" aria-label="Impressum schlieÃŸen">Ã—</a>
-            <h1>Impressum</h1>
-
-            <h2>Angaben gemÃ¤ÃŸ Â§ 5 TMG</h2>
-            <address>
-                Dustin Seehawer <br>
-                DanzigerstraÃŸe 1 <br>
-                58636 Iserlohn
-            </address>
-
-            <h2>Kontakt</h2>
-            <p>
-                E-Mail: <a href="mailto:dustinseehawer@icloud.com">dustinseehawer@icloud.com</a> <br>
-            </p>
-
-            <h2>VerbraucherÂ­streitÂ­beilegung/Universal-schlichtungsÂ­stelle</h2>
-            <p>
-                Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer
-                Verbraucherschlichtungsstelle teilzunehmen.
-            </p>
-        </div>
-    </div>
-
-    <script type="module">
-        import * as THREE from 'three';
-        // ==========================================
-        // TEIL 0a: NAMENSSPLIT UND LEUCHT-LOGIK
-        // (UnverÃ¤ndert)
-        // ==========================================
-
-        function splitText(elementId) {
-            const element = document.getElementById(elementId);
-
-            const text = element.getAttribute('data-text') || element.textContent;
-            let content = '';
-            for (const char of text) {
-                content += char === ' ' ?
-                    ' ' : `<span class="char-flash">${char}</span>`;
-            }
-            element.innerHTML = content;
-            return Array.from(element.querySelectorAll('.char-flash'));
-        }
-
-        function setupFlashEffect(elementId) {
-            const element = document.getElementById(elementId);
-            if (!element) return;
-
-            element.querySelectorAll('.char-flash').forEach(charSpan => {
-                let clickTimeout = null;
-
-                charSpan.addEventListener('click', () => {
-                    if (clickTimeout) {
-                        clearTimeout(clickTimeout);
-                    }
-                    charSpan.classList.remove('autoflashing', 'active');
-                    void charSpan.offsetWidth;
-                    charSpan.classList.add('active');
-
-
-                    clickTimeout = setTimeout(() => {
-                        charSpan.classList.remove('active');
-                        clickTimeout = null;
-                    }, 1500);
-
-                });
-            });
-        }
-
-        function startAutoFlashEffect() {
-            const line1Chars = document.getElementById('line1').querySelectorAll('.char-flash');
-            const line2Chars = document.getElementById('line2').querySelectorAll('.char-flash');
-
-            const allChars = Array.from(line1Chars).concat(Array.from(line2Chars));
-
-            const delay = 100;
-            const flashDuration = 1200;
-            const sequenceDuration = allChars.length * delay;
-            const interval = sequenceDuration + 3000;
-
-            let charIndex = 0;
-            function flashNextChar() {
-                if (charIndex < allChars.length) {
-                    const charSpan = allChars[charIndex];
-                    if (!charSpan.classList.contains('active')) {
-                        charSpan.classList.remove('autoflashing');
-                        void charSpan.offsetWidth;
-                        charSpan.classList.add('autoflashing');
-
-                        setTimeout(() => {
-                            charSpan.classList.remove('autoflashing');
-                        }, flashDuration);
-                    }
-
-                    charIndex++;
-                    setTimeout(flashNextChar, delay);
-                } else {
-                    charIndex = 0;
-                    setTimeout(flashNextChar, interval - sequenceDuration);
-                }
-            }
-            setTimeout(flashNextChar, 1000);
-        }
-
-        function setupSubtitleFlash() {
-            const subtitle = document.querySelector('.subtitle-flash');
-            if (!subtitle) return;
-
-            let subtitleTimeout = null;
-
-            subtitle.addEventListener('click', () => {
-                if (subtitleTimeout) {
-                    clearTimeout(subtitleTimeout);
-                }
-                subtitle.classList.remove('active');
-                void subtitle.offsetWidth;
-
-
-                subtitle.classList.add('active');
-
-                subtitleTimeout = setTimeout(() => {
-                    subtitle.classList.remove('active');
-                    subtitleTimeout = null;
-                }, 2000);
-
-            });
-        }
-
-        splitText('line1');
-        splitText('line2');
-        setupFlashEffect('line1');
-        setupFlashEffect('line2');
-        startAutoFlashEffect();
-        setupSubtitleFlash();
-        // ==========================================
-        // TEIL 0b: SCROLL-EFFEKT LOGIK
-        // (UnverÃ¤ndert)
-        // ==========================================
-
-        const subtitleOutline = document.getElementById('subtitleOutline');
-        const scrollDistance = window.innerHeight * 0.4;
-
-        function handleScrollEffect() {
-            const scrollY = window.scrollY;
-            const progress = Math.min(1, scrollY / scrollDistance);
-            const yTranslate = 100 * (1 - progress);
-
-            subtitleOutline.style.transform = `translateY(${yTranslate}%)`;
-        }
-
-        window.addEventListener('scroll', handleScrollEffect);
-        document.addEventListener('DOMContentLoaded', handleScrollEffect);
-        // ==========================================
-        // TEIL 1: 3D OBJEKTE (Three.js) - GLOW IMPLEMENTIERT
-        // ==========================================
-        const container = document.getElementById('scene-container');
-        if (container) {
-            const scene = new THREE.Scene();
-            scene.background = null;
-            const getSceneHeight = () => {
-                if (window.innerWidth <= 480) return 210;
-                if (window.innerWidth <= 768) return 260;
-                return window.innerHeight * 0.8;
-            };
-
-            const getCameraY = () => window.innerWidth <= 768 ? 0.35 : 0.5;
-            const getCameraZ = () => window.innerWidth <= 480 ? 11.8 : (window.innerWidth <= 768 ? 11.2 : 10);
-
-            const camera = new THREE.PerspectiveCamera(45, window.innerWidth / getSceneHeight(), 0.1, 1000);
-            camera.position.set(0, getCameraY(), getCameraZ());
-            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            renderer.setSize(window.innerWidth, getSceneHeight());
-            renderer.setPixelRatio(window.devicePixelRatio);
-            renderer.shadowMap.enabled = true;
-            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-            renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            renderer.toneMappingExposure = 1.0;
-
-            container.appendChild(renderer.domElement);
-
-            // Lichter (verbessert fÃ¼r sichtbarere Objekte)
-            const ambientLight = new THREE.AmbientLight(0xffffff, 2.0);
-            scene.add(ambientLight);
-
-            const pointFill = new THREE.PointLight(0xffffff, 1.2);
-            pointFill.position.set(5, 5, 5);
-            scene.add(pointFill);
-
-            const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.2);
-            hemiLight.position.set(0, 5, 0);
-            scene.add(hemiLight);
-
-            const mainSpot = new THREE.SpotLight(0xffffff, 2.5);
-            mainSpot.position.set(5, 10, 10);
-            mainSpot.castShadow = true;
-            mainSpot.shadow.mapSize.width = 1024;
-            mainSpot.shadow.mapSize.height = 1024;
-            scene.add(mainSpot);
-
-            const fillLight = new THREE.PointLight(0xD4AF37, 0.8);
-            fillLight.position.set(-8, -2, 5);
-            scene.add(fillLight);
-
-            const rimLight = new THREE.DirectionalLight(0xffffff, 0.9);
-            rimLight.position.set(0, 5, -10);
-            scene.add(rimLight);
-
-            const interactiveObjects = [];
-
-            // NEU: Alle Materialien erhalten Emissive Glow
-            const goldColor = new THREE.Color(0xD4AF37);
-            const goldEmissiveColor = new THREE.Color(0x8C7844); // Dunkleres, rÃ¶tliches Gold zum Leuchten
-            const subtleEmissive = new THREE.Color(0x101010); // Dunkelgrau fÃ¼r subtiles Leuchten
-
-            const goldMaterial = new THREE.MeshStandardMaterial({
-                color: goldColor,
-                metalness: 0.9,
-                roughness: 0.1,
-                emissive: goldEmissiveColor,   // Starker Glow fÃ¼r Gold
-                emissiveIntensity: 0.5
-            });
-
-            // Rahmen Material - verwendet MeshBasicMaterial damit Textur immer sichtbar ist
-            const frameMaterial = new THREE.MeshBasicMaterial({
-                color: 0xffffff // WeiÃŸ als Basis, wird von Textur Ã¼berschrieben
-            });
-
-            // Inneres Bild-Material fÃ¼r die Goldplatte (wird mit Textur Ã¼berschrieben)
-            const innerImageMaterial = new THREE.MeshStandardMaterial({
-                color: 0xffffff, // WeiÃŸ als Basis
-                roughness: 0.1, // Glatte OberflÃ¤che
-                metalness: 0.0,
-                emissive: subtleEmissive,
-                emissiveIntensity: 0.05
-            });
-
-            // Material fÃ¼r die RÃ¼ckwand der Goldplatte
-            const backPanelMaterial = new THREE.MeshStandardMaterial({
-                color: 0xffffff, // WeiÃŸ als Basis
-                roughness: 0.1, // Glatte OberflÃ¤che
-                metalness: 0.0,
-                emissive: subtleEmissive,
-                emissiveIntensity: 0.05
-            });
-
-            // Innere Bild-Textur laden (fÃ¼r die Goldplatte)
-            const textureLoader = new THREE.TextureLoader();
-            try {
-                const innerImagePath = 'assets/images/goldplatte.png';
-                textureLoader.load(
-                    innerImagePath,
-                    (texture) => {
-                        texture.colorSpace = THREE.SRGBColorSpace;
-                        texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
-                        innerImageMaterial.map = texture;
-                        innerImageMaterial.needsUpdate = true;
-                        console.log('Goldplatte-Textur erfolgreich geladen:', innerImagePath);
-                    },
-                    undefined,
-                    (error) => {
-                        console.log('Goldplatte-Textur nicht gefunden, verwende weiÃŸ:', error);
-                    }
-                );
-            } catch (e) {
-                console.log('Fehler beim Laden der Goldplatte-Textur:', e);
-            }
-
-            // RÃ¼ckwand-Textur laden (fÃ¼r die RÃ¼ckseite der Goldplatte)
-            try {
-                const backPanelImagePath = 'assets/images/goldplattehinten.jpg';
-                textureLoader.load(
-                    backPanelImagePath,
-                    (texture) => {
-                        texture.colorSpace = THREE.SRGBColorSpace;
-                        texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
-                        backPanelMaterial.map = texture;
-                        backPanelMaterial.needsUpdate = true;
-                        console.log('RÃ¼ckwand-Textur erfolgreich geladen:', backPanelImagePath);
-                    },
-                    undefined,
-                    (error) => {
-                        console.log('RÃ¼ckwand-Textur nicht gefunden, verwende weiÃŸ:', error);
-                    }
-                );
-            } catch (e) {
-                console.log('Fehler beim Laden der RÃ¼ckwand-Textur:', e);
-            }
-
-            // Lade Textur fÃ¼r den Rahmen (rahmen.jpg) damit er nicht glatt aussieht
-            try {
-                const frameTexturePath = 'assets/images/rahmen.jpg';
-                textureLoader.load(
-                    frameTexturePath,
-                    (texture) => {
-                        texture.colorSpace = THREE.SRGBColorSpace;
-                        texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
-                        frameMaterial.map = texture;
-                        frameMaterial.needsUpdate = true;
-                        console.log('Rahmen-Textur erfolgreich geladen:', frameTexturePath);
-                    },
-                    undefined,
-                    (error) => {
-                        console.log('Rahmen-Textur nicht gefunden, verwende schwarz:', error);
-                    }
-                );
-            } catch (e) {
-                console.log('Fehler beim Laden der Rahmen-Textur:', e);
-            }
-            console.log('FrameMaterial und InnerImageMaterial erstellt');
-
-            const darkLoadingMaterial = new THREE.MeshStandardMaterial({
-                color: 0x050505,
-                roughness: 0.5,
-                emissive: subtleEmissive,
-                emissiveIntensity: 0.1 // Leichter Glow fÃ¼r die dunkle Box
-            });
-
-            const lightLoadingMaterial = new THREE.MeshStandardMaterial({
-                color: 0xffffff,
-                roughness: 0.5,
-                emissive: subtleEmissive,
-                emissiveIntensity: 0.05 // Leichter Glow fÃ¼r die helle Box (Placeholder)
-            });
-
-            const innerLidMaterial = new THREE.MeshStandardMaterial({
-                color: 0xeeeeee,
-                roughness: 0.8,
-                metalness: 0.1,
-                emissive: new THREE.Color(0x202020),
-                emissiveIntensity: 0.2 // Etwas stÃ¤rkerer Glow fÃ¼r die innere Box
-            });
-
-            let boxBaseMesh;
-            let lidMesh;
-            const TEXTURE_BASE_PATH = 'assets/images/deluxebox/';
-            const BASE_FACE_PATHS = [
-                { filename: 'boden-vorne.jpg', index: 0 },
-                { filename: 'boden-hinten.jpg', index: 1 },
-                { filename: 'boden-oben.jpg', index: 2 },
-                { filename: 'boden-unten.jpg', index: 3 },
-                { filename: 'boden-links.jpg', index: 4 },
-                { filename: 'boden-rechts.jpg', index: 5 }
-            ];
-            const LID_FACE_PATHS = [
-                { filename: 'deckel-vorne.jpg', index: 0 },
-                { filename: 'deckel-hinten.jpg', index: 1 },
-                { filename: 'deckel-oben.jpg', index: 2 },
-                { filename: 'deckel-unten.jpg', index: 3 },
-                { filename: 'deckel-links.jpg', index: 4 },
-                { filename: 'deckel-links.jpg', index: 5 }
-            ];
-            function loadMaterialsForBox(facePathDefinitions, uniMaterial) {
-                const materials = Array(6).fill(uniMaterial.clone());
-                let texturesToLoad = facePathDefinitions.length;
-
-                const uniqueFilenames = new Set(facePathDefinitions.map(def => def.filename));
-                const materialCache = new Map();
-                return new Promise((resolve) => {
-                    if (texturesToLoad === 0) return resolve(materials);
-
-                    uniqueFilenames.forEach(filename => {
-
-                        const fullPath = TEXTURE_BASE_PATH + filename;
-
-                        textureLoader.load(fullPath,
-                            (texture) => {
-
-                                texture.colorSpace = THREE.SRGBColorSpace;
-
-                                const material = new THREE.MeshStandardMaterial({
-
-                                    map: texture,
-                                    color: 0xffffff,
-                                    metalness: 0.2,
-
-                                    roughness: 0.7,
-                                    side: THREE.DoubleSide,
-                                    // Subtiler Glow fÃ¼r texturierte OberflÃ¤chen
-                                    emissive: new THREE.Color(0x080808),
-                                    emissiveIntensity: 0.1
-                                });
-
-                                materialCache.set(filename, material);
-
-                                if (materialCache.size === uniqueFilenames.size) {
-
-                                    facePathDefinitions.forEach(def => {
-                                        materials[def.index] = materialCache.get(def.filename);
-                                    });
-                                    resolve(materials);
-                                }
-                            },
-                            undefined,
-                            (error) => {
-
-                                console.warn(`Warnung: Textur fÃ¼r Seite ${fullPath} konnte nicht geladen werden. Verwende Uni-Farbe.`, error);
-                                materialCache.set(filename, uniMaterial.clone());
-
-                                if (materialCache.size === uniqueFilenames.size) {
-                                    facePathDefinitions.forEach(def => {
-                                        materials[def.index] = materialCache.get(def.filename);
-
-                                    });
-                                    resolve(materials);
-                                }
-                            }
-                        );
-                    });
-                });
-            }
-
-            // Award Gruppe: Shadow Box Frame + Gold Record + Plaque
-            const awardGroup = new THREE.Group();
-            awardGroup.userData.name = 'award';
-
-
-            // Borders (Top, Bottom, Left, Right) - depth along Z is 0.4 and offset to z = 0.15
-            const borderDepth = 0.3; // Z-axis depth - reduced to prevent overlap
-            const borderThickness = 0.3; // visual thickness
-
-            // Top
-            const topGeom = new THREE.BoxGeometry(3.5, borderThickness, borderDepth);
-            const topMesh = new THREE.Mesh(topGeom, frameMaterial);
-            topMesh.position.set(0, (4.5 / 2) - (borderThickness / 2), 0.15);
-            awardGroup.add(topMesh);
-
-            // Bottom
-            const bottomGeom = new THREE.BoxGeometry(3.5, borderThickness, borderDepth);
-            const bottomMesh = new THREE.Mesh(bottomGeom, frameMaterial);
-            bottomMesh.position.set(0, -(4.5 / 2) + (borderThickness / 2), 0.15);
-            awardGroup.add(bottomMesh);
-
-            // Left
-            const leftGeom = new THREE.BoxGeometry(borderThickness, 4.1, borderDepth);
-            const leftMesh = new THREE.Mesh(leftGeom, frameMaterial);
-            leftMesh.position.set(-(3.5 / 2) + (borderThickness / 2), 0, 0.15);
-            awardGroup.add(leftMesh);
-
-            // Right
-            const rightGeom = new THREE.BoxGeometry(borderThickness, 4.1, borderDepth);
-            const rightMesh = new THREE.Mesh(rightGeom, frameMaterial);
-            rightMesh.position.set((3.5 / 2) - (borderThickness / 2), 0, 0.15);
-            awardGroup.add(rightMesh);
-
-            // Back panel to close the frame from behind
-            const backPanelGeometry = new THREE.BoxGeometry(3.5, 4.5, 0.05);
-            const backPanelMesh = new THREE.Mesh(backPanelGeometry, backPanelMaterial);
-            backPanelMesh.position.set(0, 0, -0.025); // Further behind the borders
-            awardGroup.add(backPanelMesh);
-
-            // The Plaque (with texture placeholder) - sized to fill inner frame area proportionally (ratio: 0.708)
-            // Inner frame dimensions: 2.9 x 3.9, using height 3.9 with width 3.9 * 0.708 â‰ˆ 2.762
-            const plaqueGeometry = new THREE.BoxGeometry(2.762, 3.9, 0.02);
-            const plaqueMesh = new THREE.Mesh(plaqueGeometry, innerImageMaterial);
-            plaqueMesh.position.set(0, 0, 0.15); // More recessed into the frame
-            awardGroup.add(plaqueMesh);
-
-            // Position and rotation of the group (kept similar to previous composition)
-            awardGroup.position.set(-2.5, 0, 0);
-            awardGroup.rotation.set(0.1, -0.3, 0);
-            scene.add(awardGroup);
-            interactiveObjects.push(awardGroup);
-            console.log('AwardGroup (shadow-box + gold record + plaque) added to scene:', awardGroup);
-
-
-            const baseGeometry = new THREE.BoxGeometry(3.4, 0.9, 2.8);
-            const lidGeometry = new THREE.BoxGeometry(3.5, 0.4, 2.9);
-
-            boxBaseMesh = new THREE.Mesh(baseGeometry, lightLoadingMaterial);
-            lidMesh = new THREE.Mesh(lidGeometry, darkLoadingMaterial);
-            lidMesh.position.y = (0.9 / 2) + (0.4 / 2);
-
-            const shoeBoxGroup = new THREE.Group();
-            shoeBoxGroup.userData.name = 'shoeBox';
-            shoeBoxGroup.rotation.order = 'YXZ';
-            shoeBoxGroup.add(boxBaseMesh);
-            shoeBoxGroup.add(lidMesh);
-
-            shoeBoxGroup.position.set(2.5, 0, 0);
-
-            shoeBoxGroup.rotation.set(0, 3 * Math.PI / 2 - 0.3, -Math.PI / 2);
-
-            scene.add(shoeBoxGroup);
-            interactiveObjects.push(shoeBoxGroup);
-            console.log('Schuhkarton-Objekt zur Szene hinzugefÃ¼gt:', shoeBoxGroup);
-
-            loadMaterialsForBox(BASE_FACE_PATHS, lightLoadingMaterial).then(materials => {
-                boxBaseMesh.material = materials;
-            });
-            loadMaterialsForBox(LID_FACE_PATHS, darkLoadingMaterial).then(materials => {
-                materials[3] = innerLidMaterial;
-                lidMesh.material = materials;
-            });
-
-
-            const raycaster = new THREE.Raycaster();
-            const mouse = new THREE.Vector2();
-
-            let selectedObject = null;
-            let isDragging = false;
-            let previousMousePosition = { x: 0, y: 0 };
-
-
-            function getIntersects(event, element) {
-                const rect = element.getBoundingClientRect();
-                let clientX = event.clientX;
-                let clientY = event.clientY;
-
-                if (event.changedTouches) {
-                    clientX = event.changedTouches[0].clientX;
-                    clientY = event.changedTouches[0].clientY;
-                }
-
-                // Normalisierte Mauskoordinaten fÃ¼r Raycasting
-                mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
-                mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
-
-                raycaster.setFromCamera(mouse, camera);
-                return raycaster.intersectObjects(interactiveObjects, true);
-            }
-
-            function onHover(event) {
-                if (isDragging) return;
-                const intersects = getIntersects(event, renderer.domElement);
-
-                let isOverObject = false;
-                if (intersects.length > 0) {
-                    let target = intersects[0].object;
-                    while (target.parent && target.parent.type !== 'Scene') {
-                        if (interactiveObjects.includes(target.parent) || interactiveObjects.includes(target)) {
-                            isOverObject = true;
-                            break;
-                        }
-                        target = target.parent;
-                    }
-                }
-                // HIER WURDE DER OS-CURSOR ÃœBERSCHRIEBEN. ENTFERNT, da der Custom Cursor global gilt.
-                // renderer.domElement.style.cursor = isOverObject ? 'grab' : 'default'; 
-            }
-
-            function onMouseDown(event) {
-                if (event.touches && event.touches.length > 1) return;
-                const intersects = getIntersects(event, renderer.domElement);
-                if (intersects.length > 0) {
-                    let target = intersects[0].object;
-                    while (target.parent && target.parent.type !== 'Scene') {
-                        if (interactiveObjects.includes(target.parent)) {
-                            target = target.parent;
-                            break;
-                        }
-                        if (interactiveObjects.includes(target)) break;
-                        target = target.parent;
-                    }
-
-                    if (interactiveObjects.includes(target)) {
-                        isDragging = true;
-                        selectedObject = target;
-                        // HIER WURDE DER OS-CURSOR ÃœBERSCHRIEBEN. ENTFERNT.
-                        // renderer.domElement.style.cursor = 'grabbing';
-                        const clientX = event.clientX || (event.touches ? event.touches[0].clientX : 0);
-                        const clientY = event.clientY || (event.touches ? event.touches[0].clientY : 0);
-                        previousMousePosition = { x: clientX, y: clientY };
-                    }
-                } else {
-                    isDragging = false;
-                    selectedObject = null;
-                    // HIER WURDE DER OS-CURSOR ÃœBERSCHRIEBEN. ENTFERNT.
-                    // renderer.domElement.style.cursor = 'default';
-                }
-            }
-
-            function onTouchStart(event) {
-                event.preventDefault();
-                if (event.touches.length === 1) {
-                    onMouseDown(event);
-                }
-            }
-
-            function onMouseMove(event) {
-                if (isDragging && selectedObject) {
-                    // Aktualisierung der Mausposition fÃ¼r Rotation
-                    const clientX = event.clientX ||
-                        (event.touches ? event.touches[0].clientX : 0);
-                    const clientY = event.clientY || (event.touches ? event.touches[0].clientY : 0);
-                    const deltaMove = { x: clientX - previousMousePosition.x, y: clientY - previousMousePosition.y };
-                    selectedObject.rotation.y += deltaMove.x * 0.005;
-                    selectedObject.rotation.x += deltaMove.y * 0.005;
-
-                    previousMousePosition = { x: clientX, y: clientY };
-                } else {
-                    onHover(event);
-                }
-            }
-
-            function onTouchMove(event) {
-                event.preventDefault();
-                if (event.touches.length === 1 && isDragging) {
-                    onMouseMove(event);
-                }
-            }
-
-            function onMouseUp() {
-                isDragging = false;
-                selectedObject = null;
-                // HIER WURDE DER OS-CURSOR ÃœBERSCHRIEBEN. ENTFERNT.
-                // renderer.domElement.style.cursor = 'default';
-            }
-
-            renderer.domElement.addEventListener('mousemove', onHover);
-            renderer.domElement.addEventListener('mousedown', onMouseDown);
-            renderer.domElement.addEventListener('mousemove', onMouseMove);
-            renderer.domElement.addEventListener('mouseup', onMouseUp);
-            renderer.domElement.addEventListener('touchstart', onTouchStart, { passive: false });
-            renderer.domElement.addEventListener('touchmove', onTouchMove, { passive: false });
-            renderer.domElement.addEventListener('touchend', onMouseUp);
-
-
-            function animate() {
-                requestAnimationFrame(animate);
-                // Auto-rotate the awardGroup for a subtle display motion
-                try {
-                    if (awardGroup) awardGroup.rotation.y += 0.005;
-                } catch (e) { }
-
-                interactiveObjects.forEach(obj => {
-                    if (obj !== selectedObject) obj.rotation.y += 0.002;
-                });
-                renderer.render(scene, camera);
-            }
-            console.log('Starte Animation mit', interactiveObjects.length, 'interaktiven Objekten');
-            animate();
-            window.addEventListener('resize', () => {
-                const height = getSceneHeight();
-                camera.aspect = window.innerWidth / height;
-                camera.position.set(0, getCameraY(), getCameraZ());
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, height);
-            });
-        }
-    </script>
-    <script>
-        // ==========================================
-        // TEIL 2: SMOOTH CAROUSEL & MODAL LOGIK
-        // (UnverÃ¤ndert)
-        // ==========================================
-
-        document.addEventListener('DOMContentLoaded', function () {
-            // *** SONGS-ARRAY ***
-            const songs = [
-                {
-                    title: "KEINE ZEIT",
-                    img: "assets/images/cover-1.jpg",
-                    glowColor: "200, 50, 50", // Dunkelrot
-                    link: "https://open.spotify.com/intl-de/track/3BCAeFl6Td3nCGBU2EvaU9?si=a45ccccfed964780"
-                },
-                {
-                    title: "AIRBNB",
-                    img: "assets/images/cover-2.jpg",
-                    glowColor: "191, 62, 255", // Lila/Violett
-                    link: "https://open.spotify.com/intl-de/track/2aMdP5JERlZpGqOO1cGn66?si=863c960024894c12"
-                },
-                {
-                    title: "EVERYTHINGS PURPLE 2",
-                    img: "assets/images/cover-3.jpg",
-                    glowColor: "191, 62, 255", // Lila/Violett
-                    link: "https://open.spotify.com/intl-de/album/47a4kY8Uay7LAxtBwAIRFc?si=3KDz6knZQ8O_xgWVrFwQlA"
-                },
-                {
-                    title: "EIGENTLICH TOT",
-                    img: "assets/images/cover-4.jpg",
-                    glowColor: "191, 62, 255", // Lila/Violett
-                    link: "https://open.spotify.com/intl-de/track/4IyWigl0p3RoLbgItkG4RD?si=5449fe1a430b4ca2"
-                },
-                {
-                    title: "IRGENDWIE",
-                    img: "assets/images/cover-5.jpg",
-                    glowColor: "0, 255, 0", // GrÃ¼n
-                    link: "https://open.spotify.com/track/6LzDR9u3l8RGC9YCizbEVC?si=VdTq5WdZSOWdmRHL6FRqQA"
-                },
-                {
-                    title: "ECHTE LOVE",
-                    img: "assets/images/cover-6.jpg",
-                    glowColor: "255, 20, 147", // Pink
-                    link: "https://open.spotify.com/intl-de/track/3F4WrtfP3UMC43bVPUDlMi?si=bd9e818aa081454f"
-                },
-                {
-                    title: "K TATTOO",
-                    img: "assets/images/cover-7.jpg",
-                    glowColor: "179, 18, 19", // Rot
-                    link: "https://open.spotify.com/intl-de/track/1bWiYJGbgM0ZYG68HYMuyv?si=ac0de2ec773a4f60"
-                },
-                {
-                    title: "Nicht verdient",
-                    img: "assets/images/cover-8.jpg",
-                    glowColor: "82, 208, 239", // Cyan
-                    link: "https://open.spotify.com/intl-de/track/3n33aUP9BbYXhnGfsV8Ska?si=3f6a77a7ae4148a8"
-                },
-                {
-                    title: "Life Changed",
-                    img: "assets/images/cover-9.jpg",
-                    glowColor: "68, 49, 92", // Lila
-                    link: "https://open.spotify.com/intl-de/album/46lZW3KZ9JzUEjVx92iKqe?si=AFH-3Y0CT7iTMF1Gytbeeg"
-                },
-                {
-                    title: "Stolz",
-                    img: "assets/images/cover-10.jpg",
-                    glowColor: "255, 100, 200", // Rosa
-                    link: "https://open.spotify.com/intl-de/track/6vId7m6K9nBDvlopQEJByV?si=0afe90fc955c494c"
-                },
-                {
-                    title: "ATM",
-                    img: "assets/images/cover-11.jpg",
-                    glowColor: "182, 182, 182", // Grau
-                    link: "https://open.spotify.com/intl-de/track/0fE7gTsAN3jSYbFacKOE2e?si=cd7037147f07479b"
-                },
-                {
-                    title: "Benzo Diaries",
-                    img: "assets/images/cover-12.jpg",
-                    glowColor: "157, 51, 210", // Lila
-                    link: "https://open.spotify.com/intl-de/album/2ojV7qjQ8TrBUZCnr1U5P1?si=iS6dpQLZQPCcdsEvfeV-HQ"
-                }
-            ];
-            // *** ENDE SONGS-ARRAY ***
-
-            let currentIndex = 3;
-            const track = document.getElementById('track');
-            let cardElements = [];
-
-            if (track) {
-                function initCarousel() {
-                    songs.forEach((song, i) => {
-                        const el = document.createElement('div');
-                        el.className = 'cover-art';
-
-                        // Speichere die Farbe als Datenattribut
-                        el.setAttribute('data-glow-color', song.glowColor);
-
-                        const imageUrl = song.img;
-
-                        // Bild-Element erstellen
-                        const img = document.createElement('img');
-                        img.src = imageUrl;
-                        img.alt = song.title;
-
-                        // FIX: Das Bild-Element muss zum Cover-Art Container hinzugefÃ¼gt werden
-                        el.appendChild(img);
-
-                        // Das Overlay wird NACH dem Bild eingefÃ¼gt
-                        const overlayDiv = document.createElement('div');
-                        overlayDiv.className = 'spotify-overlay';
-                        overlayDiv.setAttribute('onclick', `window.open('${song.link}', '_blank')`);
-                        overlayDiv.innerHTML = `
-                            <h3 style="margin-bottom:5px; text-transform:uppercase; letter-spacing:2px;">${song.title}</h3>
-                            <div class="spotify-btn">Listen on Spotify</div>
-                        `;
-                        el.appendChild(overlayDiv);
-
-                        track.appendChild(el);
-                        cardElements.push(el);
-                    });
-                    updateCarouselPositions();
-                }
-
-                function updateCarouselPositions() {
-                    const total = songs.length;
-
-                    // Lese die aktuelle Farbe aus dem songs-array und bereite CSS-Variablen vor
-                    const currentSong = songs[currentIndex];
-                    const glowColorRgb = currentSong.glowColor || "255, 255, 255";
-
-                    cardElements.forEach((el, index) => {
-                        let offset = (index - currentIndex);
-                        // Berechnung fÃ¼r Endlos-Karussell
-                        if (offset > total / 2) offset -= total;
-                        if (offset < -total / 2) offset += total;
-
-                        let xPos = offset * 140;
-                        let scale = 0.8;
-                        let zIndex = 5;
-                        let blur = '5px';
-                        let opacity = 0.4;
-                        let grayscale = '100%';
-
-                        if (offset === 0) {
-                            scale = 1.4;
-                            zIndex = 20;
-                            blur = '0px';
-                            opacity = 1;
-                            grayscale = '0%';
-                            el.classList.add('center');
-                            el.classList.add('glow-active'); // Animation aktivieren
-
-                            // NEU: CSS Custom Properties setzen, damit die Keyframes sie nutzen kÃ¶nnen
-                            el.style.setProperty('--current-glow-color-high', `rgba(${glowColorRgb}, 1.0)`);
-                            el.style.setProperty('--current-glow-color-mid', `rgba(${glowColorRgb}, 0.8)`);
-                            el.style.setProperty('--current-glow-color-low', `rgba(${glowColorRgb}, 0.6)`);
-                            el.style.setProperty('--current-glow-color-lowest', `rgba(${glowColorRgb}, 0.4)`);
-
-                        } else {
-                            el.classList.remove('center');
-                            el.classList.remove('glow-active'); // Animation deaktivieren
-                            el.style.boxShadow = 'none';
-
-                            if (Math.abs(offset) > 1) {
-                                scale = 0.6;
-                                opacity = 0.1;
-                                zIndex = 1;
-                            }
-                        }
-
-                        if (Math.abs(offset) > 2) {
-                            opacity = 0;
-                            scale = 0;
-                            zIndex = 0;
-                        }
-
-                        el.style.transform = `translateX(${xPos}px) scale(${scale})`;
-
-                        el.style.zIndex = zIndex;
-                        el.style.filter = `blur(${blur}) grayscale(${grayscale})`;
-                        el.style.opacity = opacity;
-                    });
-                }
-
-                initCarousel();
-                document.getElementById('nextBtn').addEventListener('click', () => {
-                    currentIndex = (currentIndex + 1) % songs.length;
-                    updateCarouselPositions();
-                });
-                document.getElementById('prevBtn').addEventListener('click', () => {
-                    currentIndex = (currentIndex - 1 + songs.length) % songs.length;
-                    updateCarouselPositions();
-                });
-            }
-
-            // NAVIGATION & MODAL VARIABLES
-            const navLinks = document.querySelectorAll('.nav-link');
-            let manualNavigationActive = false;
-            const cvModal = document.getElementById('cv-modal');
-            const closeCvBtn = document.getElementById('closeCvBtn');
-            const navCv = document.getElementById('nav-cv');
-            const globalLangToggle = document.getElementById('globalLangToggle');
-            const globalLabelDe = document.getElementById('global-label-de');
-            const globalLabelEn = document.getElementById('global-label-en');
-            const aboutTextDe = document.getElementById('about-text-de');
-            const aboutTextEn = document.getElementById('about-text-en');
-            const cvContentDe = document.getElementById('cv-content-de');
-            const cvContentEn = document.getElementById('cv-content-en');
-
-            function setLanguage(isEnglish) {
-                if (aboutTextDe && aboutTextEn) {
-                    aboutTextDe.style.display = isEnglish ? 'none' : 'block';
-                    aboutTextEn.style.display = isEnglish ? 'block' : 'none';
-                }
-
-                if (cvContentDe && cvContentEn) {
-                    cvContentDe.style.display = isEnglish ? 'none' : 'grid';
-                    cvContentEn.style.display = isEnglish ? 'grid' : 'none';
-                }
-
-                if (globalLangToggle) {
-                    globalLangToggle.checked = isEnglish;
-                }
-
-                if (globalLabelDe && globalLabelEn) {
-                    globalLabelDe.classList.toggle('active', !isEnglish);
-                    globalLabelEn.classList.toggle('active', isEnglish);
-                }
-            }
-
-            if (globalLangToggle) {
-                globalLangToggle.addEventListener('change', function () {
-                    setLanguage(this.checked);
-                });
-            }
-
-            setLanguage(false);
-
-            if (navCv) {
-                navCv.onclick = function (e) {
-                    e.preventDefault();
-                    // Set active class for CV and prevent scroll-based highlighting
-                    manualNavigationActive = true;
-                    navLinks.forEach(navLink => navLink.classList.remove('active'));
-                    navCv.classList.add('active');
-
-                    if (cvModal) {
-                        cvModal.classList.add('visible');
-                        document.body.style.overflow = 'hidden';
-                    }
-
-                    // Reset manual navigation after a short delay
-                    setTimeout(() => { manualNavigationActive = false; }, 1000);
-                };
-            }
-
-            if (closeCvBtn) {
-                closeCvBtn.onclick = function (e) {
-                    e.preventDefault();
-                    if (cvModal) {
-                        cvModal.classList.remove('visible');
-                        document.body.style.overflow = '';
-                    }
-                };
-            }
-
-            // IMPRESSUM MODAL SYSTEM
-            const impressumLink = document.getElementById('impressumLink');
-            const impressumModal = document.getElementById('impressum-modal');
-            const closeImpressumBtn = document.getElementById('closeImpressumBtn');
-
-            if (impressumLink) {
-                impressumLink.onclick = function (e) {
-                    e.preventDefault();
-                    if (impressumModal) {
-                        impressumModal.classList.add('visible');
-                        document.body.style.overflow = 'hidden';
-                    }
-                };
-            }
-
-            if (closeImpressumBtn) {
-                closeImpressumBtn.onclick = function (e) {
-                    e.preventDefault();
-                    if (impressumModal) {
-                        impressumModal.classList.remove('visible');
-                        document.body.style.overflow = '';
-                    }
-                };
-            }
-
-            // Outside click to close
-            window.onclick = function (e) {
-                if (e.target === cvModal) {
-                    cvModal.classList.remove('visible');
-                    document.body.style.overflow = '';
-                }
-                if (e.target === impressumModal) {
-                    impressumModal.classList.remove('visible');
-                    document.body.style.overflow = '';
-                }
-            };
-
-            // Escape key handler
-            document.addEventListener('keydown', function (e) {
-                if (e.key === 'Escape') {
-                    if (cvModal && cvModal.classList.contains('visible')) {
-                        cvModal.classList.remove('visible');
-                        document.body.style.overflow = '';
-                    }
-                    if (impressumModal && impressumModal.classList.contains('visible')) {
-                        impressumModal.classList.remove('visible');
-                        document.body.style.overflow = '';
-                    }
-                }
-            });
-
-
-            // ==========================================
-            // LIQUID GLASS NAVIGATION FUNCTIONALITY
-            // ==========================================
-
-            // Smooth scrolling for navigation links
-
-            // Smooth scrolling for navigation links
-            navLinks.forEach(link => {
-                // EXCLUDE modals from smooth scroll logic
-                if (link.id !== 'nav-cv' && link.id !== 'impressumLink') {
-                    link.addEventListener('click', function (e) {
-                        e.preventDefault();
-
-                        // Set active class immediately on click and prevent scroll-based highlighting
-                        manualNavigationActive = true;
-                        navLinks.forEach(navLink => {
-                            navLink.classList.remove('active');
-                        });
-                        this.classList.add('active');
-
-                        const targetId = this.getAttribute('href');
-                        const targetSection = document.querySelector(targetId);
-
-                        if (targetSection) {
-                            const headerOffset = 140; // Account for fixed header height + additional spacing
-                            const elementPosition = targetSection.offsetTop;
-                            const offsetPosition = elementPosition - headerOffset;
-
-                            window.scrollTo({
-                                top: offsetPosition,
-                                behavior: 'smooth'
-                            });
-
-                            // Re-enable scroll-based highlighting after scrolling is complete
-                            setTimeout(() => {
-                                manualNavigationActive = false;
-                            }, 1000); // 1 second delay
-                        }
-                    });
-                }
-            });
-
-            // Update active navigation link based on scroll position
-            function updateActiveNavLink() {
-                // Skip scroll-based highlighting if manual navigation is active
-                if (manualNavigationActive) return;
-
-                const scrollPosition = window.scrollY + 150; // Offset for header with additional spacing
-
-                // Remove active class from all links
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                });
-
-                let activeFound = false;
-
-                // Check which section is currently in view (prioritÃ¤t hÃ¶her als impressum)
-                const sections = [
-                    { id: '#scene-container', link: document.querySelector('[data-section="work"]') },
-                    { id: '#about-anchor', link: document.querySelector('[data-section="about"]') }
-                ];
-
-                sections.forEach(section => {
-                    const element = document.querySelector(section.id);
-                    if (element && !activeFound) {
-                        const elementTop = element.offsetTop;
-                        const elementBottom = elementTop + element.offsetHeight;
-
-                        if (scrollPosition >= elementTop && scrollPosition < elementBottom) {
-                            section.link.classList.add('active');
-                            activeFound = true;
-                        }
-                    }
-                });
-
-                // Keine automatische Hervorhebung fÃ¼r Impressum mehr - nur bei explizitem Klick
-            }
-
-            // Throttle scroll events for better performance
-            let scrollTimeout;
-            function throttledUpdateActiveNavLink() {
-                if (!scrollTimeout) {
-                    scrollTimeout = setTimeout(function () {
-                        updateActiveNavLink();
-                        scrollTimeout = null;
-                    }, 50);
-                }
-            }
-
-            // Initial check and scroll event listener
-            updateActiveNavLink();
-            window.addEventListener('scroll', throttledUpdateActiveNavLink);
-
-            // Add click effect animation
-            navLinks.forEach(link => {
-                link.addEventListener('click', function () {
-                    this.style.transform = 'scale(0.95)';
-                    setTimeout(() => {
-                        this.style.transform = '';
-                    }, 150);
-                });
-            });
-        });
-
-        // ==========================================
-        // ANIMIERTER STREAM COUNTER MIT SCROLL-TRIGGER
-        // ==========================================
-        let counterAnimationStarted = false; // Verhindert mehrfaches AuslÃ¶sen
-
-        function animateCounter(id) {
-            const counterElement = document.getElementById(id);
-            if (!counterElement) return;
-
-            const target = parseInt(counterElement.getAttribute('data-target'));
-            const duration = 3000; // Dauer der Animation in Millisekunden (3 Sek)
-            const frameRate = 1000 / 60; // 60 FPS
-            const totalFrames = Math.round(duration / frameRate);
-
-            let currentFrame = 0;
-
-            // Easing Funktion (macht es am Ende langsamer, sieht edler aus)
-            const easeOutQuad = t => t * (2 - t);
-
-            const updateCounter = () => {
-                currentFrame++;
-                const progress = easeOutQuad(currentFrame / totalFrames);
-                const currentValue = Math.round(target * progress);
-
-                // Zahl formatieren (Punkte als Tausender-Trennzeichen)
-                counterElement.innerText = currentValue.toLocaleString('de-DE');
-
-                if (currentFrame < totalFrames) {
-                    requestAnimationFrame(updateCounter);
-                } else {
-                    counterElement.innerText = target.toLocaleString('de-DE');
-                }
-            };
-
-            updateCounter();
-        }
-
-        // Intersection Observer fÃ¼r Scroll-Trigger
-        function initCounterObserver() {
-            const counterContainer = document.querySelector('.counter-container');
-            if (!counterContainer) return;
-
-            const observerOptions = {
-                root: null, // Viewport als Root
-                rootMargin: '0px',
-                threshold: 0.3 // 30% des Elements mÃ¼ssen sichtbar sein
-            };
-
-            const observerCallback = (entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting && !counterAnimationStarted) {
-                        counterAnimationStarted = true; // Verhindert mehrfaches AuslÃ¶sen
-
-                        // Kleiner Delay fÃ¼r besseren Effekt
-                        setTimeout(() => {
-                            animateCounter('total-stream-counter');
-                        }, 300);
-                    }
-                });
-            };
-
-            const observer = new IntersectionObserver(observerCallback, observerOptions);
-            observer.observe(counterContainer);
-        }
-
-        // Initialisiert den Observer beim Laden der Seite
-        document.addEventListener('DOMContentLoaded', () => {
-            initCounterObserver();
-        });
-    </script>
-</body>
-
-</html>
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-Šw^Äè€ÔÀÀÀì(€€€€€€€ô((€€€€€€€€Øµµ½‘…°¹Ù¥Í¥‰±”°(€€€€€€€€¥µÁÉ•ÍÍÕ´µµ½‘…°¹Ù¥Í¥‰±”ì(€€€€€€€€€€€‘¥ÍÁ±…äè™±•àì(€€€€€€€ô((€€€€€€€€¹Øµ½¹Ñ…¥¹•Èµ¥¹¹•Èì(€€€€€€€€€€€İ¥‘Ñ èµ¥¸ ÄÄÀÁÁà°€ÄÀÀ”¤ì(€€€€€€€€€€€µ…àµ¡•¥¡Ğè€äÁ ì(€€€€€€€€€€€½Ù•É™±½Üè…ÕÑ¼ì(€€€€€€€€€€€Á…‘‘¥¹œè€À€ÄÉÁàì(€€€€€€€ô((€€€€€€€€¹ØµÁ…”°(€€€€€€€€¹¥µÁÉ•ÍÍÕ´µ½¹Ñ•¹Ğì(€€€€€€€€€€€‰…­É½Õ¹è€ŒÁ„Á„Áì(€€€€€€€€€€€‰½É‘•Èè€ÅÁàÍ½±¥É‰„ ÈÔÔ°€ÈÔÔ°€ÈÔÔ°€À¸Àà¤ì(€€€€€€€€€€€‰½É‘•ÈµÉ…‘¥ÕÌè€ÈÑÁàì(€€€€€€€€€€€‰½àµÍ¡…‘½Üè€À€ÈÕÁà€ØÁÁàÉ‰„ À°€À°€À°€À¸Ô¤ì(€€€€€€€€€€€½Ù•É™±½Üè¡¥‘‘•¸ì(€€€€€€€ô((€€€€€€€€¹½¹Ñ•¹ĞµİÉ…ÁÁ•ÈµØì(€€€€€€€€€€€Á…‘‘¥¹œè€ÌÑÁà€ÈáÁà€ØÁÁàì(€€€€€€€€€€€‘¥ÍÁ±…äèÉ¥ì(€€€€€€€€€€€…Àè€ÈÉÁàì(€€€€€€€ô((€€€€€€€€¹Øµ¹…µ”ì(€€€€€€€€€€€™½¹ĞµÍ¥é”è€ÍÉ•´€…¥µÁ½ÉÑ…¹Ğì(€€€€€€€€€€€™½¹Ğµİ•¥¡Ğè€äÀÀ€…¥µÁ½ÉÑ…¹Ğì(€€€€€€€€€€€±•ÑÑ•ÈµÍÁ…¥¹œè€´ÉÁàì(€€€€€€€ô((€€€€€€€€¹±…ÍÌµ…ÉµØì(€€€€€€€€€€€‰…­É½Õ¹èÉ‰„ ÈÔÔ°€ÈÔÔ°€ÈÔÔ°€À¸ÀÌ¤ì(€€€€€€€€€€€‰½É‘•Èè€ÅÁàÍ½±¥É‰„ ÈÔÔ°€ÈÔÔ°€ÈÔÔ°€À¸Àà¤ì(€€€€€€€€€€€‰½É‘•ÈµÉ…‘¥ÕÌè€ÄáÁàì(€€€€€€€€€€€Á…‘‘¥¹œè€ÈÁÁàì(€€€€€€€€€€€µ…É¥¸µ‰½ÑÑ½´è€ÈÁÁàì(€€€€€€€ô((€€€€€€€€¹Øµ Èì(€€€€€€€€€€€‘¥ÍÁ±…äè™±•à€…¥µÁ½ÉÑ…¹Ğì(€€€€€€€€€€€…±¥¸µ¥Ñ•µÌè•¹Ñ•È€…¥µÁ½ÉÑ…¹Ğì(€€€€€€€€€€€…Àè€ÄÁÁà€…¥µÁ½ÉÑ…¹Ğì(€€€€€€€€€€€™½¹ĞµÍ¥é”è€À¸åÉ•´€…¥µÁ½ÉÑ…¹Ğì(€€€€€€€€€€€±•ÑÑ•ÈµÍÁ…¥¹œè€ÍÁà€…¥µÁ½ÉÑ…¹Ğì(€€€€€€€€€€€Ñ•áĞµÑÉ…¹Í™½É´èÕÁÁ•É…Í”€…¥µÁ½ÉÑ…¹Ğì(€€€€€€€€€€€µ…É¥¸µ‰½ÑÑ½´è€ÄáÁà€…¥µÁ½ÉÑ…¹Ğì(€€€€€€€ô((€€€€€€€€¹Øµ Ìì(€€€€€€€€€€€™½¹ĞµÍ¥é”è€Ä¸ÀÕÉ•´€…¥µÁ½ÉÑ…¹Ğì(€€€€€€€€€€€µ…É¥¸µ‰½ÑÑ½´è€ÑÁàì(€€€€€€€ô((€€€€€€€€¹½¹Ñ…Ğµ¥¹™¼À°(€€€€€€€€¹ØµÀ°(€€€€€€€€¹É½±”µØì(€€€€€€€€€€€™½¹ĞµÍ¥é”è€À¸åÉ•´ì(€€€€€€€€€€€±¥¹”µ¡•¥¡Ğè€Ä¸Øì(€€€€€€€€€€€½±½ÈèÉ‰„ ÈÔÔ°€ÈÔÔ°€ÈÔÔ°€À¸àÈ¤ì(€€€€€€€ô((€€€€€€€€¹Ñ¥µ•±¥¹”µ¥Ñ•´ì(€€€€€€€€€€€Á½Í¥Ñ¥½¸èÉ•±…Ñ¥Ù”ì(€€€€€€€€€€€Á…‘‘¥¹œµ±•™Ğè€ÄáÁàì(€€€€€€€€€€€µ…É¥¸µ‰½ÑÑ½´è€ÈáÁàì(€€€€€€€ô((€€€€€€€€¹Ñ¥µ•±¥¹”µ¥Ñ•´èé‰•™½É”ì(€€€€€€€€€€€½¹Ñ•¹Ğè€œœì(€€€€€€€€€€€Á½Í¥Ñ¥½¸è…‰Í½±ÕÑ”ì(€€€€€€€€€€€±•™Ğè€Àì(€€€€€€€€€€€Ñ½Àè€À¸ĞÕÉ•´ì(€€€€€€€€€€€İ¥‘Ñ è€İÁàì(€€€€€€€€€€€¡•¥¡Ğè€İÁàì(€€€€€€€€€€€‰½É‘•ÈµÉ…‘¥ÕÌè€ÔÀ”ì(€€€€€€€€€€€‰…­É½Õ¹èÉ‰„ ÈÔÔ°€ÈÔÔ°€ÈÔÔ°€À¸Ü¤ì(€€€€€€€ô((€€€€€€€€¹‘…Ñ”µØì(€€€€€€€€€€€™½¹ĞµÍ¥é”è€À¸ÜÙÉ•´ì(€€€€€€€€€€€±•ÑÑ•ÈµÍÁ…¥¹œè€Ä¸ÑÁàì(€€€€€€€€€€€Ñ•áĞµÑÉ…¹Í™½É´èÕÁÁ•É…Í”ì(€€€€€€€€€€€½±½ÈèÉ‰„ ÈÔÔ°€ÈÔÔ°€ÈÔÔ°€À¸ÔÔ¤ì(€€€€€€€€€€€µ…É¥¸µ‰½ÑÑ½´è€À¸ÌÕÉ•´ì(€€€€€€€ô((€€€€€€€€¹™½½Ñ•Èµ‘…Ñ”µØì(€€€€€€€€€€€Ñ•áĞµ…±¥¸èÉ¥¡Ğì(€€€€€€€€€€€Á…‘‘¥¹œè€À€ÈáÁà€ÈÉÁàì(€€€€€€€€€€€½±½ÈèÉ‰„ ÈÔÔ°€ÈÔÔ°€ÈÔÔ°€À¸Ôà¤ì(€€€€€€€€€€€™½¹ĞµÍ¥é”è€À¸àÉÉ•´ì(€€€€€€€ô((€€€€€€€€¹¥µÁÉ•ÍÍÕ´µ½¹Ñ•¹Ğì(€€€€€€€€€€€İ¥‘Ñ èµ¥¸ ÜØÁÁà°€ÄÀÀ”¤ì(€€€€€€€€€€€µ…àµ¡•¥¡Ğè€àáÙ ì(€€€€€€€€€€€½Ù•É™±½Üè…ÕÑ¼ì(€€€€€€€€€€€Á…‘‘¥¹œè€ÌÑÁà€ÈáÁàì(€€€€€€€ô((€€€€€€€€¹¥µÁÉ•ÍÍÕ´µ½¹Ñ•¹Ğ Ä°(€€€€€€€€¹¥µÁÉ•ÍÍÕ´µ½¹Ñ•¹Ğ Èì(€€€€€€€€€€€µ…É¥¸µ‰½ÑÑ½´è€ÄÑÁàì(€€€€€€€ô((€€€€€€€€¹¥µÁÉ•ÍÍÕ´µ½¹Ñ•¹ĞÀ°(€€€€€€€€¹¥µÁÉ•ÍÍÕ´µ½¹Ñ•¹Ğ…‘‘É•ÍÌì(€€€€€€€€€€€±¥¹”µ¡•¥¡Ğè€Ä¸Üì(€€€€€€€€€€€µ…É¥¸µ‰½ÑÑ½´è€ÄáÁàì(€€€€€€€€€€€½±½ÈèÉ‰„ ÈÔÔ°€ÈÔÔ°€ÈÔÔ°€À¸àĞ¤ì(€€€€€€€€€€€™½¹ĞµÍÑå±”è¹½Éµ…°ì(€€€€€€€ô((€€€€€€€€¹±½Í”µ‰Ñ¸ì(€€€€€€€€€€€Á½Í¥Ñ¥½¸è…‰Í½±ÕÑ”ì(€€€€€€€€€€€Ñ½Àè€ÈÑÁàì(€€€€€€€€€€€É¥¡Ğè€ÈÙÁàì(€€€€€€€€€€€½±½Èè€™™˜ì(€€€€€€€€€€€Ñ•áĞµ‘•½É…Ñ¥½¸è¹½¹”ì(€€€€€€€€€€€™½¹ĞµÍ¥é”è€ÉÉ•´ì(€€€€€€€€€€€±¥¹”µ¡•¥¡Ğè€Äì(€€€€€€€ô((€€€€€€€€ÍÑ¥­äµİÉ…ÁÁ•Èì(€€€€€€€€€€€Á½Í¥Ñ¥½¸è™¥á•ì(€€€€€€€€€€€Ñ½Àè€ÈáÁàì(€€€€€€€€€€€±•™Ğè€ÔÀ”ì(€€€€€€€€€€€ÑÉ…¹Í™½É´èÑÉ…¹Í±…Ñ•` ´ÔÀ”¤ì(€€€€€€€€€€€èµ¥¹‘•àè€ÌÀÀÀì(€€€€€€€€€€€İ¥‘Ñ è€ÄÀÀ”ì(€€€€€€€€€€€‘¥ÍÁ±…äè™±•àì(€€€€€€€€€€€©ÕÍÑ¥™äµ½¹Ñ•¹Ğè•¹Ñ•Èì(€€€€€€€€€€€Á½¥¹Ñ•Èµ•Ù•¹ÑÌè¹½¹”ì(€€€€€€€ô((€€€€€€€€ÍÑ¥­äµİÉ…ÁÁ•È€ø¨ì(€€€€€€€€€€€Á½¥¹Ñ•Èµ•Ù•¹ÑÌè…ÕÑ¼ì(€€€€€€€ô((€€€€€€€€±¥ÅÕ¥µ¹…Øì(€€€€€€€€€€€İ¥‘Ñ èµ¥¸ ĞÈÁÁà°…±Œ ÄÀÀ”€´€ĞáÁà¤¤ì(€€€€€€€€€€€‰½É‘•ÈµÉ…‘¥ÕÌè€ÈÉÁàì(€€€€€€€€€€€‰…­‘É½Àµ™¥±Ñ•Èè‰±ÕÈ ÈÙÁà¤Í…ÑÕÉ…Ñ” Ä¸Ä¤½¹ÑÉ…ÍĞ Ä¸ÀĞ¤ì(€€€€€€€€€€€‰…­É½Õ¹èÉ‰„ ÌÀ°€ÌÀ°€ÌØ°€À¸ÔÔ¤ì(€€€€€€€€€€€‰½É‘•Èè€ÅÁàÍ½±¥É‰„ ÈÔÔ°€ÈÔÔ°€ÈÔÔ°€À¸Ä¤ì(€€€€€€€€€€€‰½àµÍ¡…‘½Üè€À€ÄÉÁà€ÌÑÁàÉ‰„ À°€À°€À°€À¸ĞÔ¤°¥¹Í•Ğ€À€ÅÁà€ÀÉ‰„ ÈÔÔ°€ÈÔÔ°€ÈÔÔ°€À¸Àà¤ì(€€€€€€€ô((€€€€€€€€¹¹…Øµ½¹Ñ…¥¹•Èì(€€€€€€€€€€€¡•¥¡Ğè€ÔÉÁàì(€€€€€€€€€€€Á…‘‘¥¹œè€À€À¸áÉ•´ì(€€€€€€€€€€€‘¥ÍÁ±…äè™±•àì(€€€€€€€€€€€…±¥¸µ¥Ñ•µÌè•¹Ñ•Èì(€€€€€€€ô((€€€€€€€€¹¹…Øµ±¥¹­Ìì(€€€€€€€€€€€İ¥‘Ñ è€ÄÀÀ”ì(€€€€€€€€€€€‘¥ÍÁ±…äè™±•àì(€€€€€€€€€€€©ÕÍÑ¥™äµ½¹Ñ•¹ĞèÍÁ…”µ‰•Ñİ••¸ì(€€€€€€€€€€€…±¥¸µ¥Ñ•µÌè•¹Ñ•Èì(€€€€€€€€€€€…Àè€À¸ÈÕÉ•´ì(€€€€€€€ô((€€€€€€€€¹¹…Øµ±¥¹¬ì(€€€€€€€€€€€™±•àè€Äì(€€€€€€€€€€€Ñ•áĞµ…±¥¸è•¹Ñ•Èì(€€€€€€€€€€€½±½ÈèÉ‰„ ÈÔÔ°€ÈÔÔ°€ÈÔÔ°€À¸ÜØ¤ì(€€€€€€€€€€€Ñ•áĞµ‘•½É…Ñ¥½¸è¹½¹”ì(€€€€€€€€€€€Ñ•áĞµÑÉ…¹Í™½É´èÕÁÁ•É…Í”ì(€€€€€€€€€€€™½¹ĞµÍ¥é”è€À¸ÜÙÉ•´ì(€€€€€€€€€€€™½¹Ğµİ•¥¡Ğè€ÜÀÀì(€€€€€€€€€€€±•ÑÑ•ÈµÍÁ…¥¹œè€À¸ÀÉ•´ì(€€€€€€€€€€€Á…‘‘¥¹œè€À¸åÉ•´€À¸ÄáÉ•´ì(€€€€€€€€€€€‰½É‘•ÈµÉ…‘¥ÕÌè€ÄáÁàì(€€€€€€€€€€€ÑÉ…¹Í¥Ñ¥½¸è½±½È€À¸ÈÕÌ•…Í”°‰…­É½Õ¹€À¸ÈÕÌ•…Í”°ÑÉ…¹Í™½É´€À¸ÉÌ•…Í”ì(€€€€€€€ô((€€€€€€€€¹¹…Øµ±¥¹¬é¡½Ù•È°(€€€€€€€€¹¹…Øµ±¥¹¬¹…Ñ¥Ù”ì(€€€€€€€€€€€½±½Èè€™™˜ì(€€€€€€€€€€€‰…­É½Õ¹èÉ‰„ ÈÔÔ°€ÈÔÔ°€ÈÔÔ°€À¸ÀÔ¤ì(€€€€€€€ô((€€€€€€€€±½‰…°µ±…¹Õ…”µÍİ¥Ñ ì(€€€€€€€€€€€Á½Í¥Ñ¥½¸è™¥á•ì(€€€€€€€€€€€Ñ½Àè€ÈáÁàì(€€€€€€€€€€€É¥¡Ğè€ÈáÁàì(€€€€€€€€€€€èµ¥¹‘•àè€ÌÄÀÀì(€€€€€€€€€€€‘¥ÍÁ±…äè¥¹±¥¹”µ™±•àì(€€€€€€€€€€€…±¥¸µ¥Ñ•µÌè•¹Ñ•Èì(€€€€€€€€€€€…Àè€ÄÁÁàì(€€€€€€€€€€€Á…‘‘¥¹œè€áÁà€ÄÉÁàì(€€€€€€€€€€€‰½É‘•ÈµÉ…‘¥ÕÌè€ääåÁàì(€€€€€€€€€€€‰…­‘É½Àµ™¥±Ñ•Èè‰±ÕÈ ÈÑÁà¤Í…ÑÕÉ…Ñ” Ä¸Àà¤½¹ÑÉ…ÍĞ Ä¸ÀĞ¤ì(€€€€€€€€€€€‰…­É½Õ¹èÉ‰„ ÈÔÔ°€ÈÔÔ°€ÈÔÔ°€À¸ÀÔ¤ì(€€€€€€€€€€€‰½É‘•Èô(
