@@ -3740,7 +3740,7 @@
 
             if (creativeImages && imageModal && closeImageModalBtn && imageModalContent) {
                 creativeImages.forEach(img => {
-                    img.addEventListener('click', function() {
+                    img.addEventListener('click', function () {
                         imageModalContent.src = this.src;
                         imageModalContent.alt = this.alt;
                         imageModal.classList.add('visible');
@@ -3748,7 +3748,7 @@
                     });
                 });
 
-                closeImageModalBtn.onclick = function(e) {
+                closeImageModalBtn.onclick = function (e) {
                     e.preventDefault();
                     imageModal.classList.remove('visible');
                     document.body.style.overflow = '';
