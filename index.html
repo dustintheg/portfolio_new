@@ -894,17 +894,30 @@
             padding: 20px 20px 90px;
             position: relative;
             z-index: 10;
+            overflow: visible;
         }
 
-        .creatives-grid {
+        .creatives-carousel {
             max-width: 1200px;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 1.5rem;
+            height: 640px;
+            position: relative;
+        }
+
+        .creatives-track {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1300px;
+            transform-style: preserve-3d;
         }
 
         .creative-card {
+            position: absolute;
+            width: min(340px, 28vw);
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 28px;
@@ -914,12 +927,22 @@
                 0 18px 40px rgba(0, 0, 0, 0.38),
                 0 -2px 16px rgba(255, 255, 255, 0.08),
                 inset 0 1px 0 rgba(255, 255, 255, 0.06);
-            transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+            transition:
+                transform 0.65s cubic-bezier(0.22, 0.61, 0.36, 1),
+                opacity 0.55s ease,
+                filter 0.55s ease,
+                box-shadow 0.35s ease,
+                border-color 0.35s ease;
             overflow: hidden;
+            will-change: transform, opacity, filter;
+            pointer-events: none;
         }
 
-        .creative-card:hover {
-            transform: translateY(-6px);
+        .creative-card.is-center {
+            pointer-events: auto;
+        }
+
+        .creative-card.is-center:hover {
             border-color: rgba(255, 255, 255, 0.14);
             box-shadow:
                 0 24px 55px rgba(0, 0, 0, 0.44),
@@ -938,7 +961,7 @@
             transition: transform 0.4s ease, filter 0.4s ease;
         }
 
-        .creative-card:hover .creative-image {
+        .creative-card.is-center:hover .creative-image {
             transform: scale(1.02);
             filter: brightness(1.05);
         }
@@ -949,6 +972,12 @@
             align-items: center;
             gap: 1rem;
             margin-top: 0.95rem;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .creative-card:not(.is-center) .creative-meta {
+            opacity: 0;
+            transform: translateY(10px);
         }
 
         .creative-title {
@@ -965,6 +994,11 @@
             text-transform: uppercase;
             color: rgba(255, 255, 255, 0.55);
             white-space: nowrap;
+        }
+
+        .creative-nav-arrows {
+            top: 46%;
+            padding: 0 clamp(18px, 6vw, 72px);
         }
 
         /* LIQUID GLASS STYLE STREAM COUNTER - EXAKT WIE HEADER */
@@ -1690,7 +1724,7 @@
         }
 
         #image-modal-content {
-            max-width: 90%;
+            max-width: min(1120px, calc(100vw - 9rem));
             max-height: 90vh;
             border-radius: 12px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
@@ -1701,6 +1735,47 @@
 
         #image-modal.visible #image-modal-content {
             transform: scale(1);
+        }
+
+        .creative-image-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 54px;
+            height: 54px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 50%;
+            background: rgba(18, 18, 18, 0.52);
+            backdrop-filter: blur(18px) saturate(1.1);
+            -webkit-backdrop-filter: blur(18px) saturate(1.1);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            line-height: 1;
+            cursor: pointer;
+            z-index: 30010;
+            transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+        }
+
+        .creative-image-nav:hover {
+            transform: translateY(-50%) scale(1.06);
+            background: rgba(255, 255, 255, 0.16);
+            border-color: rgba(255, 255, 255, 0.28);
+        }
+
+        .creative-image-nav:focus-visible {
+            outline: 2px solid rgba(255, 255, 255, 0.65);
+            outline-offset: 3px;
+        }
+
+        .creative-image-nav.prev {
+            left: clamp(14px, 3vw, 34px);
+        }
+
+        .creative-image-nav.next {
+            right: clamp(14px, 3vw, 34px);
         }
 
         /* CV MODAL SPECIFIC STYLES */
@@ -2144,12 +2219,12 @@
                 padding: 0 16px 56px;
             }
 
-            .creatives-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                gap: 1rem;
+            .creatives-carousel {
+                height: 560px;
             }
 
             .creative-card {
+                width: min(300px, 54vw);
                 padding: 0.8rem;
                 border-radius: 22px;
             }
@@ -2410,8 +2485,35 @@
                 padding: 0 12px 48px;
             }
 
-            .creatives-grid {
-                grid-template-columns: 1fr;
+            .creatives-carousel {
+                height: 500px;
+            }
+
+            .creative-card {
+                width: min(250px, 74vw);
+            }
+
+            #image-modal-content {
+                max-width: calc(100vw - 2.5rem);
+            }
+
+            .creative-image-nav {
+                width: 46px;
+                height: 46px;
+                font-size: 1.6rem;
+            }
+
+            .creative-image-nav.prev {
+                left: 10px;
+            }
+
+            .creative-image-nav.next {
+                right: 10px;
+            }
+
+            .creative-nav-arrows {
+                top: 43%;
+                padding: 0 10px;
             }
 
             .app-feature-logo {
@@ -2488,7 +2590,7 @@
             <nav id="liquid-nav">
                 <div class="nav-container">
                     <div class="nav-links">
-                        <a href="#scene-container" class="nav-link" data-section="work">MY WORK</a>
+                        <a href="#creatives-section" class="nav-link" data-section="work">MY WORK</a>
                         <a href="#about-anchor" class="nav-link" data-section="about">ABOUT ME</a>
                         <a href="#cv-modal" id="nav-cv" class="nav-link" data-section="cv">LEBENSLAUF</a>
                     </div>
@@ -2510,9 +2612,80 @@
 
     </header>
 
-    <div class="section-title">MY WORK</div>
+    <div class="section-title">Creatives</div>
+    <section class="creatives-section" id="creatives-section">
+        <div class="creatives-carousel">
+            <div class="creatives-track" id="creativeTrack">
+                <article class="creative-card">
+                    <img class="creative-image" src="assets/images/creatives/creative6.jpg" alt="Creative Arbeitsprobe GEPPS">
+                    <div class="creative-meta">
+                        <div class="creative-title">GEPPS</div>
+                        <div class="creative-type">Visual Design</div>
+                    </div>
+                </article>
+
+                <article class="creative-card">
+                    <img class="creative-image" src="assets/images/creatives/creative5.jpg" alt="Creative Arbeitsprobe GEPPS">
+                    <div class="creative-meta">
+                        <div class="creative-title">GEPPS</div>
+                        <div class="creative-type">Visual Design</div>
+                    </div>
+                </article>
+
+                <article class="creative-card">
+                    <img class="creative-image" src="assets/images/creatives/creative4.jpg" alt="Creative Arbeitsprobe NOELIE">
+                    <div class="creative-meta">
+                        <div class="creative-title">NOELIE</div>
+                        <div class="creative-type">Visual Design</div>
+                    </div>
+                </article>
+
+                <article class="creative-card">
+                    <img class="creative-image" src="assets/images/creative3.jpg" alt="Creative Arbeitsprobe NOELIE">
+                    <div class="creative-meta">
+                        <div class="creative-title">NOELIE</div>
+                        <div class="creative-type">Art Direction</div>
+                    </div>
+                </article>
+
+                <article class="creative-card">
+                    <img class="creative-image" src="assets/images/creative2.jpg" alt="Creative Arbeitsprobe QLF">
+                    <div class="creative-meta">
+                        <div class="creative-title">QLF</div>
+                        <div class="creative-type">Campaign Visual</div>
+                    </div>
+                </article>
+
+                <article class="creative-card">
+                    <img class="creative-image" src="assets/images/creative1.jpg" alt="Creative Arbeitsprobe APART">
+                    <div class="creative-meta">
+                        <div class="creative-title">APART</div>
+                        <div class="creative-type">Editorial Design</div>
+                    </div>
+                </article>
+            </div>
+
+            <div class="nav-arrows creative-nav-arrows">
+                <div class="arrow" id="creativePrevBtn" aria-label="Vorheriges Creative">
+                    <svg viewBox="0 0 50 30">
+                        <polyline points="20 0 5 15 20 30" />
+                        <line x1="5" y1="15" x2="50" y2="15" />
+                    </svg>
+                </div>
+                <div class="arrow" id="creativeNextBtn" aria-label="Nächstes Creative">
+                    <svg viewBox="0 0 50 30">
+                        <polyline points="30 0 45 15 30 30" />
+                        <line x1="0" y1="15" x2="45" y2="15" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-title">3D Objekte</div>
     <section id="scene-container"></section>
 
+    <div class="section-title">Cover</div>
     <section class="carousel-section">
         <div class="carousel-track" id="track"></div>
         <div class="nav-arrows">
@@ -2540,35 +2713,6 @@
             <div class="counter-display">
                 <span id="total-stream-counter" data-target="300000000">0</span>
             </div>
-        </div>
-    </section>
-
-    <div class="section-title">Creatives</div>
-    <section class="creatives-section" id="creatives-section">
-        <div class="creatives-grid">
-            <article class="creative-card">
-                <img class="creative-image" src="assets/images/creative1.jpg" alt="Creative Arbeitsprobe Noeli">
-                <div class="creative-meta">
-                    <div class="creative-title">Noeli</div>
-                    <div class="creative-type">Editorial Design</div>
-                </div>
-            </article>
-
-            <article class="creative-card">
-                <img class="creative-image" src="assets/images/creative2.jpg" alt="Creative Arbeitsprobe Apart">
-                <div class="creative-meta">
-                    <div class="creative-title">APART</div>
-                    <div class="creative-type">Campaign Visual</div>
-                </div>
-            </article>
-
-            <article class="creative-card">
-                <img class="creative-image" src="assets/images/creative3.jpg" alt="Creative Arbeitsprobe Beispiel">
-                <div class="creative-meta">
-                    <div class="creative-title">Creative</div>
-                    <div class="creative-type">Art Direction</div>
-                </div>
-            </article>
         </div>
     </section>
 
@@ -2644,7 +2788,9 @@
     </footer>
 
     <div id="image-modal">
+        <button type="button" class="creative-image-nav prev" id="prevImageBtn" aria-label="Vorheriges Bild ansehen">‹</button>
         <a href="#" class="close-btn" id="closeImageModalBtn" aria-label="Bild schließen" style="z-index: 2000;">×</a>
+        <button type="button" class="creative-image-nav next" id="nextImageBtn" aria-label="Nächstes Bild ansehen">›</button>
         <img id="image-modal-content" src="" alt="Vergrößertes Bild">
     </div>
 
@@ -3661,6 +3807,78 @@
                 });
             }
 
+            const creativeTrack = document.getElementById('creativeTrack');
+            const creativePrevBtn = document.getElementById('creativePrevBtn');
+            const creativeNextBtn = document.getElementById('creativeNextBtn');
+            const creativeCards = creativeTrack ? Array.from(creativeTrack.querySelectorAll('.creative-card')) : [];
+            let currentCreativeIndex = 0;
+
+            function getCreativeCarouselSpacing() {
+                if (window.innerWidth <= 640) return 135;
+                if (window.innerWidth <= 1024) return 195;
+                return 300;
+            }
+
+            function updateCreativeCarousel() {
+                if (!creativeCards.length) {
+                    return;
+                }
+
+                const total = creativeCards.length;
+                const spacing = getCreativeCarouselSpacing();
+
+                creativeCards.forEach((card, index) => {
+                    let offset = index - currentCreativeIndex;
+
+                    if (offset > total / 2) offset -= total;
+                    if (offset < -total / 2) offset += total;
+
+                    const isCenter = offset === 0;
+                    const isNeighbor = Math.abs(offset) === 1;
+                    const direction = offset < 0 ? -1 : 1;
+
+                    let transform = 'translateX(0) translateY(0) translateZ(0) scale(0.5)';
+                    let opacity = '0';
+                    let filter = 'blur(10px) grayscale(70%)';
+                    let zIndex = '0';
+
+                    if (isCenter) {
+                        transform = 'translateX(0) translateY(0) translateZ(0) scale(1)';
+                        opacity = '1';
+                        filter = 'blur(0px) grayscale(0%)';
+                        zIndex = '20';
+                    } else if (isNeighbor) {
+                        transform = `translateX(${offset * spacing}px) translateY(24px) translateZ(-140px) scale(0.74) rotateY(${direction * -16}deg)`;
+                        opacity = '0.26';
+                        filter = 'blur(6px) grayscale(20%)';
+                        zIndex = '8';
+                    }
+
+                    card.classList.toggle('is-center', isCenter);
+                    card.setAttribute('aria-hidden', isCenter ? 'false' : 'true');
+                    card.style.transform = transform;
+                    card.style.opacity = opacity;
+                    card.style.filter = filter;
+                    card.style.zIndex = zIndex;
+                });
+            }
+
+            if (creativeCards.length && creativePrevBtn && creativeNextBtn) {
+                updateCreativeCarousel();
+
+                creativeNextBtn.addEventListener('click', () => {
+                    currentCreativeIndex = (currentCreativeIndex + 1) % creativeCards.length;
+                    updateCreativeCarousel();
+                });
+
+                creativePrevBtn.addEventListener('click', () => {
+                    currentCreativeIndex = (currentCreativeIndex - 1 + creativeCards.length) % creativeCards.length;
+                    updateCreativeCarousel();
+                });
+
+                window.addEventListener('resize', updateCreativeCarousel);
+            }
+
             // NAVIGATION & MODAL VARIABLES
             const navLinks = document.querySelectorAll('.nav-link');
             let manualNavigationActive = false;
@@ -3736,22 +3954,64 @@
             const imageModal = document.getElementById('image-modal');
             const closeImageModalBtn = document.getElementById('closeImageModalBtn');
             const imageModalContent = document.getElementById('image-modal-content');
-            const creativeImages = document.querySelectorAll('.creative-image');
+            const prevImageBtn = document.getElementById('prevImageBtn');
+            const nextImageBtn = document.getElementById('nextImageBtn');
+            const creativeImages = Array.from(document.querySelectorAll('.creative-image'));
+            let activeCreativeIndex = -1;
 
-            if (creativeImages && imageModal && closeImageModalBtn && imageModalContent) {
-                creativeImages.forEach(img => {
+            const closeCreativeImageModal = () => {
+                if (!imageModal) {
+                    return;
+                }
+
+                imageModal.classList.remove('visible');
+                document.body.style.overflow = '';
+                activeCreativeIndex = -1;
+            };
+
+            const openCreativeImage = (index) => {
+                if (!creativeImages.length || !imageModalContent || !imageModal) {
+                    return;
+                }
+
+                activeCreativeIndex = (index + creativeImages.length) % creativeImages.length;
+                const activeImage = creativeImages[activeCreativeIndex];
+                imageModalContent.src = activeImage.src;
+                imageModalContent.alt = activeImage.alt;
+                imageModal.classList.add('visible');
+                document.body.style.overflow = 'hidden';
+            };
+
+            const showCreativeNeighbor = (direction) => {
+                if (!imageModal || !imageModal.classList.contains('visible') || activeCreativeIndex === -1) {
+                    return;
+                }
+
+                openCreativeImage(activeCreativeIndex + direction);
+            };
+
+            if (creativeImages.length && imageModal && closeImageModalBtn && imageModalContent && prevImageBtn && nextImageBtn) {
+                creativeImages.forEach((img, index) => {
                     img.addEventListener('click', function () {
-                        imageModalContent.src = this.src;
-                        imageModalContent.alt = this.alt;
-                        imageModal.classList.add('visible');
-                        document.body.style.overflow = 'hidden';
+                        openCreativeImage(index);
                     });
                 });
 
                 closeImageModalBtn.onclick = function (e) {
                     e.preventDefault();
-                    imageModal.classList.remove('visible');
-                    document.body.style.overflow = '';
+                    closeCreativeImageModal();
+                };
+
+                prevImageBtn.onclick = function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    showCreativeNeighbor(-1);
+                };
+
+                nextImageBtn.onclick = function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    showCreativeNeighbor(1);
                 };
             }
 
@@ -3791,13 +4051,14 @@
                     document.body.style.overflow = '';
                 }
                 if (e.target === imageModal) {
-                    imageModal.classList.remove('visible');
-                    document.body.style.overflow = '';
+                    closeCreativeImageModal();
                 }
             };
 
             // Escape key handler
             document.addEventListener('keydown', function (e) {
+                const imageModalOpen = imageModal && imageModal.classList.contains('visible');
+
                 if (e.key === 'Escape') {
                     if (cvModal && cvModal.classList.contains('visible')) {
                         cvModal.classList.remove('visible');
@@ -3807,10 +4068,13 @@
                         impressumModal.classList.remove('visible');
                         document.body.style.overflow = '';
                     }
-                    if (imageModal && imageModal.classList.contains('visible')) {
-                        imageModal.classList.remove('visible');
-                        document.body.style.overflow = '';
+                    if (imageModalOpen) {
+                        closeCreativeImageModal();
                     }
+                } else if (imageModalOpen && e.key === 'ArrowLeft') {
+                    showCreativeNeighbor(-1);
+                } else if (imageModalOpen && e.key === 'ArrowRight') {
+                    showCreativeNeighbor(1);
                 }
             });
 
@@ -3873,7 +4137,7 @@
 
                 // Check which section is currently in view (priorität höher als impressum)
                 const sections = [
-                    { id: '#scene-container', link: document.querySelector('[data-section="work"]') },
+                    { id: '#creatives-section', link: document.querySelector('[data-section="work"]') },
                     { id: '#about-anchor', link: document.querySelector('[data-section="about"]') }
                 ];
 
