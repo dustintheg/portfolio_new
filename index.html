@@ -2676,6 +2676,82 @@
         }
     </style>
 
+    <style id="carousel-refinement">
+        .carousel-track,
+        .creatives-track {
+            touch-action: pan-y;
+            isolation: isolate;
+        }
+
+        .carousel-track::after,
+        .creatives-track::after {
+            content: '';
+            position: absolute;
+            inset: 4% -14%;
+            z-index: 40;
+            pointer-events: none;
+            opacity: 0;
+            background: linear-gradient(
+                105deg,
+                transparent 34%,
+                rgba(255,255,255,0.22) 47%,
+                rgba(212,175,55,0.1) 50%,
+                transparent 63%
+            );
+            mix-blend-mode: screen;
+            filter: blur(12px);
+        }
+
+        .carousel-track.is-shifting-next::after,
+        .creatives-track.is-shifting-next::after {
+            animation: carouselSweepNext 620ms cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+
+        .carousel-track.is-shifting-prev::after,
+        .creatives-track.is-shifting-prev::after {
+            animation: carouselSweepPrev 620ms cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+
+        .cover-art,
+        .creative-card {
+            backface-visibility: hidden;
+            transform-style: preserve-3d;
+        }
+
+        .cover-art.center {
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.14),
+                0 18px 42px rgba(0,0,0,0.38),
+                0 0 36px rgba(var(--current-glow-color-mid, 255,255,255), 0.22);
+        }
+
+        .creative-card.is-center {
+            box-shadow:
+                0 24px 58px rgba(0,0,0,0.42),
+                0 0 0 1px rgba(255,255,255,0.13),
+                0 0 30px rgba(255,255,255,0.07);
+        }
+
+        @keyframes carouselSweepNext {
+            0% { opacity: 0; transform: translateX(-22%) scaleX(0.72); }
+            28% { opacity: 0.72; }
+            100% { opacity: 0; transform: translateX(22%) scaleX(1.08); }
+        }
+
+        @keyframes carouselSweepPrev {
+            0% { opacity: 0; transform: translateX(22%) scaleX(0.72); }
+            28% { opacity: 0.72; }
+            100% { opacity: 0; transform: translateX(-22%) scaleX(1.08); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .carousel-track::after,
+            .creatives-track::after {
+                animation: none !important;
+            }
+        }
+    </style>
+
 </head>
 
 <body>
@@ -2725,6 +2801,32 @@
 
 
     </header>
+
+    <div class="section-title">Cover</div>
+    <section class="carousel-section">
+        <div class="carousel-track" id="track"></div>
+        <div class="nav-arrows">
+            <div class="arrow" id="prevBtn">
+                <svg viewBox="0 0 50 30">
+                    <polyline points="20 0 5 15 20 30" />
+                    <line x1="5" y1="15" x2="50" y2="15" />
+                </svg>
+
+
+            </div>
+            <div class="arrow" id="nextBtn">
+                <svg viewBox="0 0 50 30">
+                    <polyline points="30 0 45 15 30 30" />
+                    <line x1="0" y1="15" x2="45" y2="15" />
+                </svg>
+            </div>
+        </div>
+    </section>
+
+
+    <div class="section-title">Physische Produkte</div>
+    <section id="scene-container"></section>
+
 
     <div class="section-title">Creatives</div>
     <section class="creatives-section" id="creatives-section">
@@ -2804,6 +2906,7 @@
             </div>
         </div>
     </section>
+
 
     <!-- LIQUID GLASS STYLE STREAM COUNTER -->
     <section class="stream-counter-section">
@@ -3896,13 +3999,49 @@
                 }
 
                 initCarousel();
-                document.getElementById('nextBtn').addEventListener('click', () => {
+                const goToNextCover = () => {
+                    animateCarouselTrack(track, 'next');
                     currentIndex = (currentIndex + 1) % songs.length;
                     updateCarouselPositions();
-                });
-                document.getElementById('prevBtn').addEventListener('click', () => {
+                };
+                const goToPreviousCover = () => {
+                    animateCarouselTrack(track, 'prev');
                     currentIndex = (currentIndex - 1 + songs.length) % songs.length;
                     updateCarouselPositions();
+                };
+
+                document.getElementById('nextBtn').addEventListener('click', goToNextCover);
+                document.getElementById('prevBtn').addEventListener('click', goToPreviousCover);
+                bindCarouselSwipe(track, goToNextCover, goToPreviousCover);
+            }
+
+            function animateCarouselTrack(trackElement, direction) {
+                if (!trackElement) return;
+                trackElement.classList.remove('is-shifting-next', 'is-shifting-prev');
+                void trackElement.offsetWidth;
+                trackElement.classList.add(direction === 'next' ? 'is-shifting-next' : 'is-shifting-prev');
+                window.setTimeout(() => {
+                    trackElement.classList.remove('is-shifting-next', 'is-shifting-prev');
+                }, 650);
+            }
+
+            function bindCarouselSwipe(trackElement, onNext, onPrev) {
+                if (!trackElement) return;
+                let swipeStart = null;
+
+                trackElement.addEventListener('pointerdown', (event) => {
+                    swipeStart = { x: event.clientX, y: event.clientY };
+                });
+
+                trackElement.addEventListener('pointerup', (event) => {
+                    if (!swipeStart) return;
+                    const deltaX = event.clientX - swipeStart.x;
+                    const deltaY = event.clientY - swipeStart.y;
+                    swipeStart = null;
+
+                    if (Math.abs(deltaX) < 42 || Math.abs(deltaX) < Math.abs(deltaY)) return;
+                    if (deltaX < 0) onNext();
+                    else onPrev();
                 });
             }
 
@@ -3965,15 +4104,21 @@
             if (creativeCards.length && creativePrevBtn && creativeNextBtn) {
                 updateCreativeCarousel();
 
-                creativeNextBtn.addEventListener('click', () => {
+                const goToNextCreative = () => {
+                    animateCarouselTrack(creativeTrack, 'next');
                     currentCreativeIndex = (currentCreativeIndex + 1) % creativeCards.length;
                     updateCreativeCarousel();
-                });
+                };
 
-                creativePrevBtn.addEventListener('click', () => {
+                const goToPreviousCreative = () => {
+                    animateCarouselTrack(creativeTrack, 'prev');
                     currentCreativeIndex = (currentCreativeIndex - 1 + creativeCards.length) % creativeCards.length;
                     updateCreativeCarousel();
-                });
+                };
+
+                creativeNextBtn.addEventListener('click', goToNextCreative);
+                creativePrevBtn.addEventListener('click', goToPreviousCreative);
+                bindCarouselSwipe(creativeTrack, goToNextCreative, goToPreviousCreative);
 
                 window.addEventListener('resize', updateCreativeCarousel);
             }
