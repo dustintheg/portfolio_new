@@ -3235,8 +3235,7 @@
             camera.position.set(0, getCameraY(), getCameraZ());
             const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(window.innerWidth, getSceneHeight());
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.outputColorSpace = THREE.SRGBColorSpace;
+            renderer.setPixelRatio(window.devicePixelRatio);
             renderer.shadowMap.enabled = true;
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -3245,30 +3244,29 @@
             container.appendChild(renderer.domElement);
 
             // Lichter (verbessert für sichtbarere Objekte)
-            const ambientLight = new THREE.AmbientLight(0xffffff, 1.15);
+            const ambientLight = new THREE.AmbientLight(0xffffff, 2.0);
             scene.add(ambientLight);
 
-            const pointFill = new THREE.PointLight(0xffffff, 1.6, 18, 1.7);
-            pointFill.position.set(4.5, 5.5, 6);
+            const pointFill = new THREE.PointLight(0xffffff, 1.2);
+            pointFill.position.set(5, 5, 5);
             scene.add(pointFill);
 
-            const hemiLight = new THREE.HemisphereLight(0xbfc9e8, 0x12121b, 0.65);
+            const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.2);
             hemiLight.position.set(0, 5, 0);
             scene.add(hemiLight);
 
-            const mainSpot = new THREE.SpotLight(0xfff6e7, 4.2, 26, Math.PI / 5, 0.48, 1.4);
+            const mainSpot = new THREE.SpotLight(0xffffff, 2.5);
             mainSpot.position.set(5, 10, 10);
             mainSpot.castShadow = true;
-            mainSpot.shadow.mapSize.width = 1536;
-            mainSpot.shadow.mapSize.height = 1536;
-            mainSpot.shadow.bias = -0.00015;
+            mainSpot.shadow.mapSize.width = 1024;
+            mainSpot.shadow.mapSize.height = 1024;
             scene.add(mainSpot);
 
-            const fillLight = new THREE.PointLight(0xD4AF37, 1.05, 16, 2);
+            const fillLight = new THREE.PointLight(0xD4AF37, 0.8);
             fillLight.position.set(-8, -2, 5);
             scene.add(fillLight);
 
-            const rimLight = new THREE.DirectionalLight(0x9aa8ff, 1.35);
+            const rimLight = new THREE.DirectionalLight(0xffffff, 0.9);
             rimLight.position.set(0, 5, -10);
             scene.add(rimLight);
 
@@ -3288,18 +3286,14 @@
             });
 
             // Rahmen Material - verwendet MeshBasicMaterial damit Textur immer sichtbar ist
-            const frameMaterial = new THREE.MeshStandardMaterial({
-                color: 0xffffff,
-                metalness: 0.58,
-                roughness: 0.26,
-                envMapIntensity: 0.75,
-                side: THREE.DoubleSide
+            const frameMaterial = new THREE.MeshBasicMaterial({
+                color: 0xffffff // Weiß als Basis, wird von Textur überschrieben
             });
 
             // Inneres Bild-Material für die Goldplatte (wird mit Textur überschrieben)
             const innerImageMaterial = new THREE.MeshStandardMaterial({
-                color: 0xffffff,
-                roughness: 0.22,
+                color: 0xffffff, // Weiß als Basis
+                roughness: 0.1, // Glatte Oberfläche
                 metalness: 0.0,
                 emissive: subtleEmissive,
                 emissiveIntensity: 0.05
@@ -3418,7 +3412,7 @@
                 { filename: 'deckel-oben.jpg', index: 2 },
                 { filename: 'deckel-unten.jpg', index: 3 },
                 { filename: 'deckel-links.jpg', index: 4 },
-                { filename: 'deckel-rechts.jpg', index: 5 }
+                { filename: 'deckel-links.jpg', index: 5 }
             ];
             function loadMaterialsForBox(facePathDefinitions, uniMaterial) {
                 const materials = Array(6).fill(uniMaterial.clone());
@@ -3550,15 +3544,6 @@
             shoeBoxGroup.position.set(2.5, getSceneObjectY(), 0);
 
             shoeBoxGroup.rotation.set(0, 3 * Math.PI / 2 - 0.3, -Math.PI / 2);
-
-            const groundShadow = new THREE.Mesh(
-                new THREE.PlaneGeometry(11, 5.5),
-                new THREE.ShadowMaterial({ color: 0x000000, opacity: 0.2 })
-            );
-            groundShadow.rotation.x = -Math.PI / 2;
-            groundShadow.position.set(0, -1.82, -0.45);
-            groundShadow.receiveShadow = true;
-            scene.add(groundShadow);
 
             scene.add(shoeBoxGroup);
             interactiveObjects.push(shoeBoxGroup);
@@ -3695,25 +3680,16 @@
             renderer.domElement.addEventListener('touchend', onMouseUp);
 
 
-            const awardIdleRotation = { x: 0.1, y: -0.3, z: 0 };
-            const shoeBoxIdleRotation = { x: 0, y: 3 * Math.PI / 2 - 0.3, z: -Math.PI / 2 };
-
             function animate() {
                 requestAnimationFrame(animate);
-                const time = performance.now() * 0.001;
+                // Auto-rotate the awardGroup for a subtle display motion
+                try {
+                    if (awardGroup) awardGroup.rotation.y += 0.005;
+                } catch (e) { }
 
-                if (awardGroup !== selectedObject) {
-                    awardGroup.rotation.x = awardIdleRotation.x + Math.sin(time * 0.55) * 0.018;
-                    awardGroup.rotation.y = awardIdleRotation.y + Math.sin(time * 0.42) * 0.085;
-                    awardGroup.rotation.z = awardIdleRotation.z + Math.sin(time * 0.34) * 0.012;
-                }
-
-                if (shoeBoxGroup !== selectedObject) {
-                    shoeBoxGroup.rotation.x = shoeBoxIdleRotation.x + Math.sin(time * 0.38 + 1.4) * 0.014;
-                    shoeBoxGroup.rotation.y = shoeBoxIdleRotation.y + Math.sin(time * 0.31 + 0.8) * 0.065;
-                    shoeBoxGroup.rotation.z = shoeBoxIdleRotation.z + Math.sin(time * 0.44) * 0.012;
-                }
-
+                interactiveObjects.forEach(obj => {
+                    if (obj !== selectedObject) obj.rotation.y += 0.002;
+                });
                 renderer.render(scene, camera);
             }
             console.log('Starte Animation mit', interactiveObjects.length, 'interaktiven Objekten');
