@@ -2836,6 +2836,23 @@
         }
     </style>
 
+    <style id="label-rotation-refinement">
+        .scene-object-label {
+            --label-rotate: 0deg;
+            transform-style: preserve-3d;
+            transform-origin: center center;
+        }
+
+        @keyframes sceneLabelFloat {
+            0%, 100% {
+                transform: translateY(0) rotateY(var(--label-rotate));
+            }
+            50% {
+                transform: translateY(-7px) rotateY(var(--label-rotate));
+            }
+        }
+    </style>
+
 </head>
 
 <body>
@@ -3729,6 +3746,31 @@
             });
 
 
+            const awardLabel = document.querySelector('.scene-object-label-award');
+            const boxLabel = document.querySelector('.scene-object-label-box');
+            const labelTiltState = { award: 0, box: 0 };
+
+            const clampLabelTilt = (value) => Math.max(-34, Math.min(34, value));
+
+            function updateAnnotationRotation() {
+                const awardTarget = selectedObject === awardGroup
+                    ? clampLabelTilt((awardGroup.rotation.y + 0.3) * -42)
+                    : 0;
+                const boxTarget = selectedObject === shoeBoxGroup
+                    ? clampLabelTilt((shoeBoxGroup.rotation.y - (3 * Math.PI / 2 - 0.3)) * -42)
+                    : 0;
+
+                labelTiltState.award += (awardTarget - labelTiltState.award) * 0.14;
+                labelTiltState.box += (boxTarget - labelTiltState.box) * 0.14;
+
+                if (awardLabel) {
+                    awardLabel.style.setProperty('--label-rotate', labelTiltState.award.toFixed(2) + 'deg');
+                }
+                if (boxLabel) {
+                    boxLabel.style.setProperty('--label-rotate', labelTiltState.box.toFixed(2) + 'deg');
+                }
+            }
+
             const raycaster = new THREE.Raycaster();
             const mouse = new THREE.Vector2();
 
@@ -3861,6 +3903,7 @@
                 interactiveObjects.forEach(obj => {
                     if (obj !== selectedObject) obj.rotation.y += 0.002;
                 });
+                updateAnnotationRotation();
                 renderer.render(scene, camera);
             }
             console.log('Starte Animation mit', interactiveObjects.length, 'interaktiven Objekten');
