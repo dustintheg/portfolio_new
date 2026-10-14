@@ -2870,6 +2870,23 @@
         }
     </style>
 
+    <style id="nav-free-layout">
+        /* Temporary editorial layout test: the section navigation is hidden. */
+        #sticky-wrapper {
+            display: none !important;
+        }
+
+        #mainHeader {
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 700px) {
+            #mainHeader {
+                margin-top: 1.5rem;
+            }
+        }
+    </style>
+
 </head>
 
 <body>
@@ -2900,7 +2917,6 @@
                     <div class="nav-links">
                         <a href="#creatives-section" class="nav-link" data-section="work">MY WORK</a>
                         <a href="#about-anchor" class="nav-link" data-section="about">ABOUT ME</a>
-                        <a href="#cv-modal" id="nav-cv" class="nav-link" data-section="cv">LEBENSLAUF</a>
                     </div>
                 </div>
             </nav>
