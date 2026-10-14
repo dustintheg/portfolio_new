@@ -3080,6 +3080,74 @@
             }
         }
     </style>
+    <style id="contour-visibility-motion-fix">
+        /* Side cards should add atmosphere without creating opaque rectangles. */
+        .carousel-track .cover-art:not(.center) {
+            background: transparent !important;
+            mix-blend-mode: screen;
+        }
+
+        .carousel-track .cover-art:not(.center) img {
+            mix-blend-mode: screen;
+        }
+
+        .edge-sculpture {
+            animation-duration: 13s;
+            animation-timing-function: cubic-bezier(0.45, 0.05, 0.55, 0.95);
+            animation-iteration-count: infinite;
+            animation-direction: alternate;
+        }
+
+        .sculpture-hero {
+            animation-name: contourHeroDrift;
+        }
+
+        .sculpture-physical {
+            animation-name: contourPhysicalDrift;
+            animation-duration: 16s;
+        }
+
+        .sculpture-creatives {
+            animation-name: contourCreativesDrift;
+            animation-duration: 19s;
+        }
+
+        @keyframes contourHeroDrift {
+            0% {
+                transform: rotate(-14deg) translate3d(0, 0, 0) scale(1);
+            }
+
+            100% {
+                transform: rotate(-11.5deg) translate3d(-32px, 20px, 0) scale(1.028);
+            }
+        }
+
+        @keyframes contourPhysicalDrift {
+            0% {
+                transform: rotate(11deg) translate3d(0, 0, 0) scale(1);
+            }
+
+            100% {
+                transform: rotate(8.5deg) translate3d(28px, -24px, 0) scale(1.024);
+            }
+        }
+
+        @keyframes contourCreativesDrift {
+            0% {
+                transform: rotate(-8deg) translate3d(0, 0, 0) scale(1);
+            }
+
+            100% {
+                transform: rotate(-5deg) translate3d(-34px, 22px, 0) scale(1.026);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .edge-sculpture {
+                animation: none !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
