@@ -3148,6 +3148,91 @@
             }
         }
     </style>
+    <style id="contour-whole-form-twist">
+        /* The contour field stays transparent and cannot create a rectangular edge. */
+        #art-direction-field,
+        #art-direction-field .edge-sculpture {
+            background: transparent !important;
+            clip-path: none !important;
+            mask: none !important;
+            mix-blend-mode: screen;
+        }
+
+        #art-direction-field {
+            overflow: visible;
+        }
+
+        .edge-sculpture {
+            transform-style: preserve-3d;
+            backface-visibility: visible;
+            will-change: transform;
+        }
+
+        /* Clip only the carousel's own cards, not the decorative contour field. */
+        .carousel-track {
+            overflow: hidden;
+        }
+
+        .sculpture-hero {
+            animation: contourHeroTwist 18s ease-in-out infinite alternate;
+        }
+
+        .sculpture-physical {
+            animation: contourPhysicalTwist 22s ease-in-out infinite alternate;
+        }
+
+        .sculpture-creatives {
+            animation: contourCreativesTwist 25s ease-in-out infinite alternate;
+        }
+
+        @keyframes contourHeroTwist {
+            0% {
+                transform: perspective(1100px) rotateX(-3deg) rotateY(-7deg) rotateZ(-14deg) translate3d(0, 0, 0) scale(1);
+            }
+
+            50% {
+                transform: perspective(1100px) rotateX(7deg) rotateY(9deg) rotateZ(-8deg) translate3d(-22px, 14px, 0) scale(1.025);
+            }
+
+            100% {
+                transform: perspective(1100px) rotateX(-5deg) rotateY(5deg) rotateZ(-12deg) translate3d(-36px, 24px, 0) scale(1.04);
+            }
+        }
+
+        @keyframes contourPhysicalTwist {
+            0% {
+                transform: perspective(1100px) rotateX(4deg) rotateY(7deg) rotateZ(11deg) translate3d(0, 0, 0) scale(1);
+            }
+
+            50% {
+                transform: perspective(1100px) rotateX(-8deg) rotateY(-8deg) rotateZ(5deg) translate3d(20px, -16px, 0) scale(1.022);
+            }
+
+            100% {
+                transform: perspective(1100px) rotateX(5deg) rotateY(-4deg) rotateZ(9deg) translate3d(34px, -28px, 0) scale(1.038);
+            }
+        }
+
+        @keyframes contourCreativesTwist {
+            0% {
+                transform: perspective(1100px) rotateX(-5deg) rotateY(-6deg) rotateZ(-8deg) translate3d(0, 0, 0) scale(1);
+            }
+
+            50% {
+                transform: perspective(1100px) rotateX(8deg) rotateY(7deg) rotateZ(-2deg) translate3d(-24px, 16px, 0) scale(1.024);
+            }
+
+            100% {
+                transform: perspective(1100px) rotateX(-6deg) rotateY(4deg) rotateZ(-6deg) translate3d(-40px, 26px, 0) scale(1.04);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .edge-sculpture {
+                animation: none !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
