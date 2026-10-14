@@ -2752,6 +2752,107 @@
         }
     </style>
 
+    <style id="physical-work-labels">
+        #scene-container { position: relative; }
+
+        .scene-object-label {
+            position: absolute;
+            z-index: 5;
+            width: clamp(10rem, 15vw, 14rem);
+            color: rgba(255, 255, 255, 0.86);
+            pointer-events: none;
+            text-shadow: 0 2px 18px rgba(0, 0, 0, 0.65);
+            animation: sceneLabelFloat 7s ease-in-out infinite;
+        }
+
+        .scene-object-label-award {
+            top: 24%;
+            left: clamp(1rem, 6vw, 7rem);
+            text-align: right;
+        }
+
+        .scene-object-label-box {
+            top: 32%;
+            right: clamp(1rem, 6vw, 7rem);
+            animation-delay: -3.2s;
+        }
+
+        .scene-object-label::after {
+            content: '';
+            position: absolute;
+            top: 1.55rem;
+            width: clamp(2.5rem, 6vw, 6rem);
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.48));
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.22);
+        }
+
+        .scene-object-label-award::after {
+            right: calc(clamp(2.5rem, 6vw, 6rem) * -1);
+        }
+
+        .scene-object-label-box::after {
+            left: calc(clamp(2.5rem, 6vw, 6rem) * -1);
+            transform: scaleX(-1);
+        }
+
+        .scene-label-kicker {
+            display: block;
+            margin-bottom: 0.45rem;
+            color: var(--gold);
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            line-height: 1;
+            text-transform: uppercase;
+        }
+
+        .scene-object-label strong {
+            display: block;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: clamp(1.05rem, 1.7vw, 1.45rem);
+            font-style: italic;
+            font-weight: 400;
+            line-height: 1.05;
+        }
+
+        .scene-label-detail {
+            display: block;
+            margin-top: 0.6rem;
+            color: rgba(255, 255, 255, 0.58);
+            font-size: clamp(0.62rem, 0.72vw, 0.75rem);
+            line-height: 1.45;
+        }
+
+        @keyframes sceneLabelFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-7px); }
+        }
+
+        @media (max-width: 700px) {
+            .scene-object-label {
+                bottom: 4%;
+                top: auto;
+                width: 45%;
+            }
+
+            .scene-object-label-award {
+                left: 0.8rem;
+                text-align: left;
+            }
+
+            .scene-object-label-box { right: 0.8rem; }
+            .scene-object-label::after { display: none; }
+            .scene-label-kicker { font-size: 0.52rem; letter-spacing: 0.14em; }
+            .scene-object-label strong { font-size: 0.95rem; }
+            .scene-label-detail { font-size: 0.58rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .scene-object-label { animation: none; }
+        }
+    </style>
+
 </head>
 
 <body>
@@ -2833,8 +2934,19 @@
         </div>
     </section>
 
-    <div class="section-title">Physische Produkte</div>
-    <section id="scene-container"></section>
+    <div class="section-title">Physische Arbeiten</div>
+    <section id="scene-container" aria-label="Ausgewählte physische Designarbeiten">
+        <div class="scene-object-label scene-object-label-award">
+            <span class="scene-label-kicker">Gold Award</span>
+            <strong>„Ordentlich“</strong>
+            <span class="scene-label-detail">Goldschallplatte für den Song<br>Konzeption, Gestaltung &amp; Coverdesign</span>
+        </div>
+        <div class="scene-object-label scene-object-label-box">
+            <span class="scene-label-kicker">Deluxe Box</span>
+            <strong>Drug Related Lifestyle</strong>
+            <span class="scene-label-detail">Limitierte Album-Box für Lo<br>Packaging Design &amp; Art Direction</span>
+        </div>
+    </section>
 
     <div class="section-title">Creatives</div>
     <section class="creatives-section" id="creatives-section">
