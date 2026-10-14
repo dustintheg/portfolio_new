@@ -2902,14 +2902,197 @@
             }
         }
     </style>
+    <style id="experimental-art-direction">
+        html,
+        body {
+            background: #000000 !important;
+            overflow-x: hidden;
+        }
+
+        body::before,
+        body::after,
+        .orb-container {
+            display: none !important;
+        }
+
+        #art-direction-field {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            min-height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .edge-sculpture {
+            position: absolute;
+            display: block;
+            overflow: visible;
+            width: min(920px, 78vw);
+            height: auto;
+            opacity: 0.78;
+            transform-origin: center;
+        }
+
+        .sculpture-hero {
+            top: 2rem;
+            right: -24rem;
+            transform: rotate(-14deg);
+        }
+
+        .sculpture-physical {
+            top: 1760px;
+            left: -29rem;
+            width: min(980px, 82vw);
+            opacity: 0.66;
+            transform: rotate(11deg);
+        }
+
+        .sculpture-creatives {
+            top: 3140px;
+            right: -30rem;
+            width: min(1060px, 86vw);
+            opacity: 0.62;
+            transform: rotate(-8deg);
+        }
+
+        .edge-sculpture .contour {
+            fill: none;
+            vector-effect: non-scaling-stroke;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .edge-sculpture .contour-soft {
+            stroke: rgba(255, 255, 255, 0.20);
+            stroke-width: 1.15;
+        }
+
+        .edge-sculpture .contour-mid {
+            stroke: rgba(255, 255, 255, 0.47);
+            stroke-width: 1.7;
+        }
+
+        .edge-sculpture .contour-fine {
+            stroke: rgba(255, 255, 255, 0.70);
+            stroke-width: 0.9;
+        }
+
+        #mainHeader,
+        .section-title,
+        .carousel-section,
+        .stream-counter-section,
+        #scene-container,
+        .creatives-section,
+        .app-feature-section,
+        .about-container,
+        footer {
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 700px) {
+            .edge-sculpture {
+                width: 720px;
+                opacity: 0.58;
+            }
+
+            .sculpture-hero {
+                top: 1rem;
+                right: -560px;
+            }
+
+            .sculpture-physical {
+                top: 1660px;
+                left: -570px;
+            }
+
+            .sculpture-creatives {
+                top: 3050px;
+                right: -620px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .edge-sculpture {
+                animation: none !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <div class="orb-container">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
+    <div id="art-direction-field" aria-hidden="true">
+        <svg class="edge-sculpture sculpture-hero" viewBox="0 0 1000 1000" role="presentation">
+            <g class="contour contour-soft">
+                <path d="M126 490 C168 294 347 128 557 159 C728 184 864 316 835 470 C802 646 600 806 395 776 C218 750 89 657 126 490Z" />
+                <path d="M172 482 C213 323 356 202 531 202 C695 202 792 319 756 447 C711 607 564 718 408 715 C268 712 140 630 172 482Z" />
+                <path d="M219 473 C257 354 375 254 510 251 C635 249 725 335 689 439 C650 551 536 653 416 653 C306 653 189 584 219 473Z" />
+                <path d="M269 465 C301 377 395 302 493 302 C585 302 661 356 635 435 C604 529 516 594 426 594 C342 594 244 539 269 465Z" />
+                <path d="M319 459 C345 402 412 351 482 351 C548 351 604 388 585 438 C563 498 503 541 438 541 C377 541 300 502 319 459Z" />
+            </g>
+            <g class="contour contour-mid">
+                <path d="M84 532 C143 253 367 70 617 123 C832 168 935 340 878 522 C821 704 612 883 354 823 C164 779 48 684 84 532Z" />
+                <path d="M238 573 C213 467 289 326 431 262 C560 204 716 232 769 342 C838 487 705 656 556 718 C417 776 264 694 238 573Z" />
+                <path d="M365 701 C293 621 317 499 418 408 C515 321 670 321 711 421 C757 532 652 640 550 686 C472 720 402 729 365 701Z" />
+                <path d="M474 646 C412 608 411 531 467 470 C522 409 613 402 651 455 C691 512 640 588 581 620 C539 643 501 659 474 646Z" />
+            </g>
+            <g class="contour contour-fine">
+                <path d="M54 443 C221 87 615 25 849 221" />
+                <path d="M42 620 C192 864 544 929 862 701" />
+                <path d="M328 178 C442 126 604 143 695 230" />
+                <path d="M291 758 C444 841 627 779 751 657" />
+                <path d="M603 165 C727 246 782 355 757 463" />
+            </g>
+        </svg>
+
+        <svg class="edge-sculpture sculpture-physical" viewBox="0 0 1000 1000" role="presentation">
+            <g class="contour contour-soft">
+                <path d="M215 140 C407 55 709 119 825 308 C938 493 827 719 631 817 C438 914 191 835 122 634 C59 452 81 200 215 140Z" />
+                <path d="M255 188 C412 112 651 155 749 314 C838 459 752 652 589 738 C432 821 231 754 171 596 C119 459 145 241 255 188Z" />
+                <path d="M302 236 C426 175 594 199 674 323 C744 431 672 586 550 653 C424 722 278 667 227 553 C184 455 212 282 302 236Z" />
+                <path d="M346 286 C442 242 555 254 612 344 C661 423 611 532 522 579 C430 628 336 587 297 508 C265 442 289 314 346 286Z" />
+            </g>
+            <g class="contour contour-mid">
+                <path d="M147 94 C365 8 718 78 886 293 C1010 452 912 694 721 843" />
+                <path d="M120 742 C259 904 523 944 750 811" />
+                <path d="M237 414 C315 329 450 303 561 347 C672 391 701 515 622 602 C543 690 380 682 285 602 C217 545 184 471 237 414Z" />
+                <path d="M370 430 C426 383 503 382 558 423 C613 465 611 531 559 574 C497 625 405 597 365 546 C337 510 339 456 370 430Z" />
+            </g>
+            <g class="contour contour-fine">
+                <path d="M183 162 C327 67 545 63 718 171" />
+                <path d="M135 567 C204 771 421 858 626 782" />
+                <path d="M401 143 C512 119 625 153 696 225" />
+                <path d="M267 697 C400 761 548 743 651 671" />
+                <path d="M742 318 C817 427 800 541 742 622" />
+            </g>
+        </svg>
+
+        <svg class="edge-sculpture sculpture-creatives" viewBox="0 0 1000 1000" role="presentation">
+            <g class="contour contour-soft">
+                <path d="M148 386 C203 190 440 94 651 172 C834 240 907 442 816 622 C711 828 449 886 254 762 C120 677 95 536 148 386Z" />
+                <path d="M198 395 C256 243 433 166 597 214 C748 258 808 418 741 558 C662 725 459 777 309 690 C205 630 155 505 198 395Z" />
+                <path d="M250 409 C303 300 439 239 563 272 C677 303 722 421 674 522 C616 645 471 690 363 624 C277 572 212 488 250 409Z" />
+                <path d="M304 422 C344 352 443 313 526 332 C604 350 640 430 606 494 C566 570 481 602 416 566 C354 532 276 474 304 422Z" />
+            </g>
+            <g class="contour contour-mid">
+                <path d="M68 512 C133 237 423 37 702 145 C914 227 972 458 851 675" />
+                <path d="M259 843 C485 932 765 817 870 622" />
+                <path d="M346 491 C402 428 494 400 569 436 C645 472 655 553 600 612 C536 682 429 671 364 610 C323 572 310 530 346 491Z" />
+                <path d="M438 510 C470 482 520 478 557 501 C594 524 596 565 568 594 C534 628 483 621 450 591 C428 571 420 527 438 510Z" />
+            </g>
+            <g class="contour contour-fine">
+                <path d="M117 346 C283 120 585 75 791 211" />
+                <path d="M159 692 C330 839 577 851 754 730" />
+                <path d="M383 181 C496 129 627 155 709 222" />
+                <path d="M300 753 C455 814 615 771 715 678" />
+                <path d="M718 264 C808 355 835 466 799 560" />
+            </g>
+        </svg>
     </div>
 
 
@@ -4673,6 +4856,27 @@
         document.addEventListener('DOMContentLoaded', () => {
             initCounterObserver();
         });
+    </script>
+    <script id="art-direction-height">
+        (() => {
+            const field = document.getElementById('art-direction-field');
+            if (!field) return;
+
+            const syncFieldHeight = () => {
+                field.style.height = Math.max(
+                    document.documentElement.scrollHeight,
+                    document.body.scrollHeight
+                ) + 'px';
+            };
+
+            syncFieldHeight();
+            window.addEventListener('load', syncFieldHeight, { once: true });
+            window.addEventListener('resize', syncFieldHeight, { passive: true });
+
+            if ('ResizeObserver' in window) {
+                new ResizeObserver(syncFieldHeight).observe(document.body);
+            }
+        })();
     </script>
 </body>
 
