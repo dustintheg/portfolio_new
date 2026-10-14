@@ -3776,26 +3776,32 @@
                     event.preventDefault();
                     label.setPointerCapture(event.pointerId);
                     label.classList.add('is-dragging');
+                    label.style.transition = 'none';
                     dragState = {
                         pointerId: event.pointerId,
-                        startX: event.clientX,
-                        startY: event.clientY
+                        previousX: event.clientX,
+                        previousY: event.clientY,
+                        rotationX: 0,
+                        rotationY: 0
                     };
                 });
 
                 label.addEventListener('pointermove', (event) => {
                     if (!dragState || event.pointerId !== dragState.pointerId) return;
 
-                    const deltaX = event.clientX - dragState.startX;
-                    const deltaY = event.clientY - dragState.startY;
-                    const translateX = clamp(deltaX * 0.42, -42, 42);
-                    const translateY = clamp(deltaY * 0.3, -26, 26);
-                    const angle = clamp(deltaX * 0.22, -16, 16);
+                    const deltaX = event.clientX - dragState.previousX;
+                    const deltaY = event.clientY - dragState.previousY;
+
+                    // Same drag-to-rotation ratio as the 3D objects.
+                    dragState.rotationY = clamp(dragState.rotationY + deltaX * 0.005, -0.9, 0.9);
+                    dragState.rotationX = clamp(dragState.rotationX + deltaY * 0.005, -0.9, 0.9);
+                    dragState.previousX = event.clientX;
+                    dragState.previousY = event.clientY;
 
                     label.style.transform =
-                        'translate3d(' + translateX.toFixed(1) + 'px, ' +
-                        translateY.toFixed(1) + 'px, 0) rotateZ(' +
-                        angle.toFixed(1) + 'deg)';
+                        'perspective(700px) rotateX(' +
+                        (dragState.rotationX * 57.2958).toFixed(2) + 'deg) rotateY(' +
+                        (dragState.rotationY * 57.2958).toFixed(2) + 'deg)';
                 });
 
                 const resetLabel = (event) => {
@@ -3805,7 +3811,8 @@
                     }
                     dragState = null;
                     label.classList.remove('is-dragging');
-                    label.style.transform = 'translate3d(0, 0, 0) rotateZ(0deg)';
+                    label.style.transition = 'transform 900ms cubic-bezier(0.22, 0.61, 0.36, 1)';
+                    label.style.transform = 'perspective(700px) rotateX(0deg) rotateY(0deg)';
                 };
 
                 label.addEventListener('pointerup', resetLabel);
