@@ -2853,6 +2853,23 @@
         }
     </style>
 
+    <style id="direct-label-manipulation">
+        .scene-object-label {
+            pointer-events: auto;
+            cursor: grab;
+            user-select: none;
+            touch-action: none;
+            animation: none;
+            transition: transform 850ms cubic-bezier(0.22, 0.61, 0.36, 1);
+            will-change: transform;
+        }
+
+        .scene-object-label.is-dragging {
+            cursor: grabbing;
+            transition: none;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -3748,28 +3765,55 @@
 
             const awardLabel = document.querySelector('.scene-object-label-award');
             const boxLabel = document.querySelector('.scene-object-label-box');
-            const labelTiltState = { award: 0, box: 0 };
 
-            const clampLabelTilt = (value) => Math.max(-34, Math.min(34, value));
+            function bindIndependentLabelDrag(label) {
+                if (!label) return;
 
-            function updateAnnotationRotation() {
-                const awardTarget = selectedObject === awardGroup
-                    ? clampLabelTilt((awardGroup.rotation.y + 0.3) * -42)
-                    : 0;
-                const boxTarget = selectedObject === shoeBoxGroup
-                    ? clampLabelTilt((shoeBoxGroup.rotation.y - (3 * Math.PI / 2 - 0.3)) * -42)
-                    : 0;
+                let dragState = null;
+                const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
-                labelTiltState.award += (awardTarget - labelTiltState.award) * 0.14;
-                labelTiltState.box += (boxTarget - labelTiltState.box) * 0.14;
+                label.addEventListener('pointerdown', (event) => {
+                    event.preventDefault();
+                    label.setPointerCapture(event.pointerId);
+                    label.classList.add('is-dragging');
+                    dragState = {
+                        pointerId: event.pointerId,
+                        startX: event.clientX,
+                        startY: event.clientY
+                    };
+                });
 
-                if (awardLabel) {
-                    awardLabel.style.setProperty('--label-rotate', labelTiltState.award.toFixed(2) + 'deg');
-                }
-                if (boxLabel) {
-                    boxLabel.style.setProperty('--label-rotate', labelTiltState.box.toFixed(2) + 'deg');
-                }
+                label.addEventListener('pointermove', (event) => {
+                    if (!dragState || event.pointerId !== dragState.pointerId) return;
+
+                    const deltaX = event.clientX - dragState.startX;
+                    const deltaY = event.clientY - dragState.startY;
+                    const translateX = clamp(deltaX * 0.42, -42, 42);
+                    const translateY = clamp(deltaY * 0.3, -26, 26);
+                    const angle = clamp(deltaX * 0.22, -16, 16);
+
+                    label.style.transform =
+                        'translate3d(' + translateX.toFixed(1) + 'px, ' +
+                        translateY.toFixed(1) + 'px, 0) rotateZ(' +
+                        angle.toFixed(1) + 'deg)';
+                });
+
+                const resetLabel = (event) => {
+                    if (!dragState || (event && event.pointerId !== dragState.pointerId)) return;
+                    if (event && label.hasPointerCapture(event.pointerId)) {
+                        label.releasePointerCapture(event.pointerId);
+                    }
+                    dragState = null;
+                    label.classList.remove('is-dragging');
+                    label.style.transform = 'translate3d(0, 0, 0) rotateZ(0deg)';
+                };
+
+                label.addEventListener('pointerup', resetLabel);
+                label.addEventListener('pointercancel', resetLabel);
             }
+
+            bindIndependentLabelDrag(awardLabel);
+            bindIndependentLabelDrag(boxLabel);
 
             const raycaster = new THREE.Raycaster();
             const mouse = new THREE.Vector2();
@@ -3903,7 +3947,6 @@
                 interactiveObjects.forEach(obj => {
                     if (obj !== selectedObject) obj.rotation.y += 0.002;
                 });
-                updateAnnotationRotation();
                 renderer.render(scene, camera);
             }
             console.log('Starte Animation mit', interactiveObjects.length, 'interaktiven Objekten');
