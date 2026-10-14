@@ -2761,7 +2761,10 @@
             width: clamp(10rem, 15vw, 14rem);
             color: rgba(255, 255, 255, 0.86);
             pointer-events: none;
-            text-shadow: 0 2px 18px rgba(0, 0, 0, 0.65);
+            text-shadow:
+                0 2px 8px rgba(0, 0, 0, 0.98),
+                0 6px 22px rgba(0, 0, 0, 0.82),
+                0 0 28px rgba(0, 0, 0, 0.42);
             animation: sceneLabelFloat 7s ease-in-out infinite;
         }
 
@@ -2775,25 +2778,6 @@
             top: 32%;
             right: clamp(1rem, 6vw, 7rem);
             animation-delay: -3.2s;
-        }
-
-        .scene-object-label::after {
-            content: '';
-            position: absolute;
-            top: 1.55rem;
-            width: clamp(2.5rem, 6vw, 6rem);
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.48));
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.22);
-        }
-
-        .scene-object-label-award::after {
-            right: calc(clamp(2.5rem, 6vw, 6rem) * -1);
-        }
-
-        .scene-object-label-box::after {
-            left: calc(clamp(2.5rem, 6vw, 6rem) * -1);
-            transform: scaleX(-1);
         }
 
         .scene-label-kicker {
@@ -2842,7 +2826,6 @@
             }
 
             .scene-object-label-box { right: 0.8rem; }
-            .scene-object-label::after { display: none; }
             .scene-label-kicker { font-size: 0.52rem; letter-spacing: 0.14em; }
             .scene-object-label strong { font-size: 0.95rem; }
             .scene-label-detail { font-size: 0.58rem; }
@@ -2939,12 +2922,12 @@
         <div class="scene-object-label scene-object-label-award">
             <span class="scene-label-kicker">Gold Award</span>
             <strong>„Ordentlich“</strong>
-            <span class="scene-label-detail">Goldschallplatte für den Song<br>Konzeption, Gestaltung &amp; Coverdesign</span>
+            <span class="scene-label-detail">Goldschallplatte für den Song<br>Konzeption und Gestaltung des Awards<br>und Coverdesign</span>
         </div>
         <div class="scene-object-label scene-object-label-box">
             <span class="scene-label-kicker">Deluxe Box</span>
             <strong>Drug Related Lifestyle</strong>
-            <span class="scene-label-detail">Limitierte Album-Box für Lo<br>Packaging Design &amp; Art Direction</span>
+            <span class="scene-label-detail">Limitierte Album-Box für T-Low<br>Packaging Design &amp; Art Direction</span>
         </div>
     </section>
 
