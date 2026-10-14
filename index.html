@@ -2887,6 +2887,21 @@
         }
     </style>
 
+    <style id="label-float-restoration">
+        .scene-object-label:not(.is-dragging) {
+            animation: sceneLabelFloat 7s ease-in-out infinite;
+        }
+
+        .scene-object-label.is-dragging {
+            animation: none;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .scene-object-label:not(.is-dragging) {
+                animation: none;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -2897,16 +2912,6 @@
         <div class="orb orb-3"></div>
     </div>
 
-    <div id="global-language-switch">
-        <div class="lang-switch-wrapper">
-            <span class="lang-label active" id="global-label-de">DE</span>
-            <label class="toggle-switch">
-                <input type="checkbox" id="globalLangToggle">
-                <span class="slider"></span>
-            </label>
-            <span class="lang-label" id="global-label-en">EN</span>
-        </div>
-    </div>
 
     <!-- STICKY WRAPPER for LIQUID GLASS NAVIGATION HEADER -->
     <div id="sticky-wrapper">
