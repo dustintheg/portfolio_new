@@ -3022,6 +3022,64 @@
             }
         }
     </style>
+    <style id="contour-motion-refinement">
+        /* Keep carousel placeholders transparent so no dark block masks the contour field. */
+        .carousel-track .cover-art {
+            background-color: transparent;
+        }
+
+        .edge-sculpture {
+            will-change: transform;
+        }
+
+        .sculpture-hero {
+            animation: contourHeroDrift 22s ease-in-out infinite alternate;
+        }
+
+        .sculpture-physical {
+            animation: contourPhysicalDrift 26s ease-in-out infinite alternate;
+        }
+
+        .sculpture-creatives {
+            animation: contourCreativesDrift 30s ease-in-out infinite alternate;
+        }
+
+        @keyframes contourHeroDrift {
+            0%, 100% {
+                transform: rotate(-14deg) translate3d(0, 0, 0) scale(1);
+            }
+
+            50% {
+                transform: rotate(-12.5deg) translate3d(-18px, 13px, 0) scale(1.018);
+            }
+        }
+
+        @keyframes contourPhysicalDrift {
+            0%, 100% {
+                transform: rotate(11deg) translate3d(0, 0, 0) scale(1);
+            }
+
+            50% {
+                transform: rotate(9.5deg) translate3d(16px, -15px, 0) scale(1.014);
+            }
+        }
+
+        @keyframes contourCreativesDrift {
+            0%, 100% {
+                transform: rotate(-8deg) translate3d(0, 0, 0) scale(1);
+            }
+
+            50% {
+                transform: rotate(-6.5deg) translate3d(-20px, 12px, 0) scale(1.016);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .edge-sculpture {
+                animation: none !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
