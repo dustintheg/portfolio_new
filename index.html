@@ -3239,6 +3239,40 @@
             margin-left: 0.12em;
         }
     </style>
+
+    <style id="carousel-side-layout">
+        /* Side cards stay beside the active design instead of sitting behind it. */
+        .carousel-track,
+        .creatives-track {
+            overflow: visible;
+            touch-action: pan-y;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .cover-art:not(.center),
+        .creative-card:not(.is-center) {
+            box-shadow: none;
+        }
+
+        .creative-card:not(.is-center) {
+            background: rgba(255, 255, 255, 0.018);
+            border-color: rgba(255, 255, 255, 0.045);
+        }
+
+        @media (max-width: 700px) {
+            .creative-card {
+                width: min(220px, 66vw);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .creative-card {
+                width: min(205px, 68vw);
+            }
+        }
+    </style>
+
 </head>
 
 <body>
@@ -4523,63 +4557,68 @@
                     updateCarouselPositions();
                 }
 
+                function getCoverCarouselSpacing() {
+                    if (window.innerWidth <= 480) return 146;
+                    if (window.innerWidth <= 700) return 164;
+                    if (window.innerWidth <= 1024) return 280;
+                    return 350;
+                }
+
                 function updateCarouselPositions() {
                     const total = songs.length;
+                    const spacing = getCoverCarouselSpacing();
 
-                    // Lese die aktuelle Farbe aus dem songs-array und bereite CSS-Variablen vor
+                    // Keep the active cover forward while placing grayscale neighbors beside it.
                     const currentSong = songs[currentIndex];
                     const glowColorRgb = currentSong.glowColor || "255, 255, 255";
 
                     cardElements.forEach((el, index) => {
-                        let offset = (index - currentIndex);
-                        // Berechnung für Endlos-Karussell
+                        let offset = index - currentIndex;
                         if (offset > total / 2) offset -= total;
                         if (offset < -total / 2) offset += total;
 
-                        let xPos = offset * 140;
-                        let scale = 0.8;
-                        let zIndex = 5;
-                        let blur = '5px';
-                        let opacity = 0.4;
-                        let grayscale = '100%';
+                        const isCenter = offset === 0;
+                        const isNeighbor = Math.abs(offset) === 1;
+                        const xPos = offset * spacing;
 
-                        if (offset === 0) {
+                        let scale = 0.72;
+                        let zIndex = 8;
+                        let blur = '1px';
+                        let opacity = 0.42;
+                        let grayscale = '100%';
+                        let brightness = '0.72';
+
+                        if (isCenter) {
                             scale = 1.4;
                             zIndex = 20;
                             blur = '0px';
                             opacity = 1;
                             grayscale = '0%';
+                            brightness = '1';
                             el.classList.add('center');
-                            el.classList.add('glow-active'); // Animation aktivieren
-
-                            // NEU: CSS Custom Properties setzen, damit die Keyframes sie nutzen können
+                            el.classList.add('glow-active');
+                            el.style.pointerEvents = 'auto';
+                            el.style.boxShadow = '';
                             el.style.setProperty('--current-glow-color-high', `rgba(${glowColorRgb}, 1.0)`);
                             el.style.setProperty('--current-glow-color-mid', `rgba(${glowColorRgb}, 0.8)`);
                             el.style.setProperty('--current-glow-color-low', `rgba(${glowColorRgb}, 0.6)`);
                             el.style.setProperty('--current-glow-color-lowest', `rgba(${glowColorRgb}, 0.4)`);
-
                         } else {
                             el.classList.remove('center');
-                            el.classList.remove('glow-active'); // Animation deaktivieren
+                            el.classList.remove('glow-active');
                             el.style.boxShadow = 'none';
-
-                            if (Math.abs(offset) > 1) {
-                                scale = 0.6;
-                                opacity = 0.1;
-                                zIndex = 1;
-                            }
+                            el.style.pointerEvents = 'none';
                         }
 
-                        if (Math.abs(offset) > 1) {
+                        if (!isNeighbor && !isCenter) {
                             opacity = 0;
                             scale = 0;
                             zIndex = 0;
                         }
 
-                        el.style.transform = `translateX(${xPos}px) scale(${scale})`;
-
+                        el.style.transform = `translate3d(${xPos}px, 0, 0) scale(${scale})`;
                         el.style.zIndex = zIndex;
-                        el.style.filter = `blur(${blur}) grayscale(${grayscale})`;
+                        el.style.filter = `blur(${blur}) grayscale(${grayscale}) brightness(${brightness})`;
                         el.style.opacity = opacity;
                     });
                 }
@@ -4613,22 +4652,44 @@
 
             function bindCarouselSwipe(trackElement, onNext, onPrev) {
                 if (!trackElement) return;
+
                 let swipeStart = null;
 
+                const resetSwipe = () => {
+                    swipeStart = null;
+                };
+
                 trackElement.addEventListener('pointerdown', (event) => {
-                    swipeStart = { x: event.clientX, y: event.clientY };
-                });
+                    if (!event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0)) {
+                        return;
+                    }
+
+                    swipeStart = {
+                        x: event.clientX,
+                        y: event.clientY,
+                        pointerId: event.pointerId
+                    };
+                }, { passive: true });
 
                 trackElement.addEventListener('pointerup', (event) => {
-                    if (!swipeStart) return;
+                    if (!swipeStart || event.pointerId !== swipeStart.pointerId) {
+                        return;
+                    }
+
                     const deltaX = event.clientX - swipeStart.x;
                     const deltaY = event.clientY - swipeStart.y;
-                    swipeStart = null;
+                    resetSwipe();
 
-                    if (Math.abs(deltaX) < 42 || Math.abs(deltaX) < Math.abs(deltaY)) return;
+                    if (Math.abs(deltaX) < 42 || Math.abs(deltaX) < Math.abs(deltaY)) {
+                        return;
+                    }
+
                     if (deltaX < 0) onNext();
                     else onPrev();
-                });
+                }, { passive: true });
+
+                trackElement.addEventListener('pointercancel', resetSwipe, { passive: true });
+                trackElement.addEventListener('lostpointercapture', resetSwipe, { passive: true });
             }
 
             const creativeTrack = document.getElementById('creativeTrack');
@@ -4638,9 +4699,10 @@
             let currentCreativeIndex = 0;
 
             function getCreativeCarouselSpacing() {
-                if (window.innerWidth <= 640) return 135;
-                if (window.innerWidth <= 1024) return 195;
-                return 300;
+                if (window.innerWidth <= 480) return 178;
+                if (window.innerWidth <= 700) return 200;
+                if (window.innerWidth <= 1024) return 315;
+                return 380;
             }
 
             function updateCreativeCarousel() {
@@ -4659,22 +4721,21 @@
 
                     const isCenter = offset === 0;
                     const isNeighbor = Math.abs(offset) === 1;
-                    const direction = offset < 0 ? -1 : 1;
 
-                    let transform = 'translateX(0) translateY(0) translateZ(0) scale(0.5)';
+                    let transform = 'translate3d(0, 0, 0) scale(0.66)';
                     let opacity = '0';
-                    let filter = 'blur(10px) grayscale(70%)';
+                    let filter = 'blur(1px) grayscale(100%) brightness(0.65)';
                     let zIndex = '0';
 
                     if (isCenter) {
-                        transform = 'translateX(0) translateY(0) translateZ(0) scale(1)';
+                        transform = 'translate3d(0, 0, 0) scale(1)';
                         opacity = '1';
-                        filter = 'blur(0px) grayscale(0%)';
+                        filter = 'blur(0px) grayscale(0%) brightness(1)';
                         zIndex = '20';
                     } else if (isNeighbor) {
-                        transform = `translateX(${offset * spacing}px) translateY(24px) translateZ(-140px) scale(0.74) rotateY(${direction * -16}deg)`;
-                        opacity = '0.26';
-                        filter = 'blur(6px) grayscale(20%)';
+                        transform = `translate3d(${offset * spacing}px, 0, 0) scale(0.72)`;
+                        opacity = '0.44';
+                        filter = 'blur(0.5px) grayscale(100%) brightness(0.68)';
                         zIndex = '8';
                     }
 
@@ -4684,6 +4745,7 @@
                     card.style.opacity = opacity;
                     card.style.filter = filter;
                     card.style.zIndex = zIndex;
+                    card.style.pointerEvents = isCenter ? 'auto' : 'none';
                 });
             }
 
